@@ -7,7 +7,7 @@ from io import BytesIO
 from PIL import Image
 
 pic_out = "output/"
-file_name = datetime.now().strftime("%Y%m%d-%H%M%S") + ".jpg"
+file_name = datetime.now().strftime("%Y%m%d-%H%M%S")
 
 camera = PiCamera()
 stream = BytesIO()
@@ -26,12 +26,12 @@ stream.seek(0)
 
 image = Image.open(stream)
 
-image.save(pic_out + file_name)
+image.save(pic_out + file_name + ".jpg")
 
 # image = image.rotate(90)
 w, h = image.size
 nimg = image.crop((w*.1, 0, w*.8, h))
-nimg.save(pic_out + 'edit-' + file_name)
+nimg.save(pic_out + file_name + "-edit.jpg")
 
 
 print("Done!")
