@@ -30,7 +30,7 @@ image.save(pic_out + file_name)
 
 # image = image.rotate(90)
 w, h = image.size
-nimg = image.crop(w*.1, 0, w/.8, h)
+nimg = image.crop((w*.1, 0, w/.8, h))
 nimg.save(pic_out + 'edit-' + file_name)
 
 
