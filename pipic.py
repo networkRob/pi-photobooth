@@ -5,7 +5,7 @@ from time import sleep
 from datetime import datetime
 
 pic_out = "output/"
-file_name = datetime.now().strftime("%Y-%m-%d.%H:%M:%S") + ".jpg"
+file_name = datetime.now().strftime("%Y%m%d-%H%M%S") + ".jpg"
 
 camera = PiCamera()
 
