@@ -24,7 +24,7 @@ camera.stop_preview()
 
 stream.seek(0)
 
-image = Image.opent(stream)
+image = Image.open(stream)
 
 image.rotate(90)
 image.save(pic_out + file_name)
