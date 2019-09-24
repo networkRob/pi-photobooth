@@ -23,15 +23,16 @@ def cropImg(pImg):
 
 camera.start_preview()
 sleep(2)
-#camera.capture(pic_out + file_name)
-camera.capture(stream, format="jpeg")
+camera.capture(pic_out + file_name + ".jpg")
+# camera.capture(stream, format="jpeg")
 camera.stop_preview()
 
-stream.seek(0)
+# stream.seek(0)
 
-image = Image.open(stream)
+# image = Image.open(stream)
+image = Image.open(pic_out + file_name + ".jpg")
 
-image.save(pic_out + file_name + ".jpg")
+# image.save(pic_out + file_name + ".jpg")
 
 nimg = cropImg(image)
 nimg.save(pic_out + file_name + "-edit.jpg")
