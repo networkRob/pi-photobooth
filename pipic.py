@@ -3,7 +3,7 @@
 from picamera import PiCamera
 from time import sleep
 from datetime import datetime
-from io impoort BytesIO
+from io import BytesIO
 from PIL import Image
 
 pic_out = "output/"
