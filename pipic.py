@@ -7,10 +7,10 @@ from datetime import datetime
 pic_out = "output/"
 file_name = datetime.now().strftime("%Y%m%d-%H%M%S")
 
-camera = PiCamera(sensor_mode=2)
-
+# camera = PiCamera(sensor_mode=2)
+camera = PiCamera()
 # Cameral configurations:
-# camera.resolution = (3280, 2464)
+camera.resolution = (3280, 2464)
 camera.rotation = 90 
 
 
