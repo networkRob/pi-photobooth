@@ -10,7 +10,7 @@ file_name = datetime.now().strftime("%Y%m%d-%H%M%S") + ".jpg"
 camera = PiCamera()
 
 # Cameral configurations:
-camera.resolution = (2592, 1944)
+camera.resolution = (1944, 2592)
 camera.rotation = 90 
 
 camera.start_preview()
