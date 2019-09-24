@@ -14,7 +14,7 @@ stream = BytesIO()
 
 # Cameral configurations:
 camera.resolution = (3280, 2464)
-# camera.rotation = 90 
+camera.rotation = 90 
 
 camera.start_preview()
 sleep(2)
@@ -26,8 +26,12 @@ stream.seek(0)
 
 image = Image.open(stream)
 
-image = image.rotate(90)
 image.save(pic_out + file_name)
+
+# image = image.rotate(90)
+w, h = image.size
+nimg = image.crop(w*.1, 0, w/.8, h)
+nimg.save(pic_out + 'edit-' + file_name)
 
 
 print("Done!")
