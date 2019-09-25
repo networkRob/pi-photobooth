@@ -12,5 +12,16 @@ ws.onopen = function()
 };
 ws.onmessage = function (evt) {
     var re_data = evt.data;
-    document.getElementById("pres").innerHTML = re_data;
+    var received_msg = JSON.parse(re_data);
+    if ( received_msg['type'] == 'countdown') {
+        document.getElementById("countdown").innerHTML = received_msg['data'];
+        document.getElementById("baseID").innerHTML = "";
+    }
+    else if (received_msg['type'] == 'hello') {
+        document.getElementById("baseID").innerHTML = received_msg['data'];
+    }
+    
+    else {
+        document.getElementById("baseID").innerHTML = received_msg['data'];
+    }
 }
