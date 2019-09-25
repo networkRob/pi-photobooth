@@ -1,4 +1,7 @@
-var mURL = 'ws://pb-01:8888/ws-camera';
+var mURL = window.location.href;
+mURL = mURL.replace('http:','ws:');
+mURL = mURL.replace('/booth',"/ws-camera");
+//pb-01:8888/ws-camera';
 var ws = new WebSocket(mURL);
 ws.onopen = function()
 {

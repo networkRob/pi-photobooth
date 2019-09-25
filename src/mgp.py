@@ -28,7 +28,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         # self.schedule_update()
     
     def on_message(self,message):
-        print("Received: {}".format(message))        
+        print("[{0}] Sent: {1}".format(self.request.remote_ip,message))        
 
     # def schedule_update(self):
     #     self.timeout = tornado.ioloop.IOLoop.instance().add_timeout(timedelta(seconds=1),self.update_client)
