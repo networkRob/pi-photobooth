@@ -20,7 +20,11 @@ ws.onmessage = function (evt) {
     else if (received_msg['type'] == 'hello') {
         document.getElementById("baseID").innerHTML = received_msg['data'];
     }
-    
+    else if (received_msg['type'] == 'photo') {
+        tmp_output =  "<img src='pb-imgs/" + received_msg['data'] + "'>";
+        tmp_output += "<br /><br /><a href='../booth'>Snap Another?</a>";
+        document.getElementById("baseID").innerHTML = tmp_output;
+    }
     else {
         document.getElementById("baseID").innerHTML = received_msg['data'];
     }

@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 
 l_port = 8888
 # pi_resolution = (3280, 2464)
-pic_out = "pb-imgs/"
+pic_out = "html/pb-imgs/"
 
 def getDATETIME():
     return(datetime.now().strftime("%Y%m%d-%H%M%S"))
@@ -38,7 +38,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         self.countdown()
 
     def countdown(self):
-        count_down = 5
+        count_down = 3
         picam = activateCamera()
         while count_down > 0:
             self.write_message(json.dumps({'type':'countdown','data':count_down}))
@@ -47,7 +47,8 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         self.write_message(json.dumps({'type':'countdown','data':'Cheese!'}))
         cam_result = takePicture(picam)
         if cam_result:
-            print("Picture saved to {}".format(cam_result))
+            print("Picture saved to {}".format(cam_result[0]))
+            self.write_message(json.dumps({'type':'photo','data':cam_result[1]}))
         else:
             print("There was an error :(")
         # Might need this? still get an error when trying to do it again
@@ -66,22 +67,24 @@ class boothRequestHandler(tornado.web.RequestHandler):
 
 
 def activateCamera():
-    camera = PiCamera()
     # camera.resolution = pi_resolution
     camera.start_preview()
     return(camera)
 
 def takePicture(cam_obj):
     # try:
-    file_name = pic_out + getDATETIME() + ".jpg"
-    cam_obj.capture(file_name)
+    file_name = getDATETIME() + ".jpg"
+    file_path = pic_out + file_name
+    cam_obj.capture(file_path)
     cam_obj.stop_preview()
-    return(file_name)
+    return([file_path,file_name])
     # except:
     #     return(False)
 
 if __name__ == "__main__":
+    camera = PiCamera()
     app = tornado.web.Application([
+        (r'/pb-imgs/(.*)', tornado.web.StaticFileHandler, {'path': "html/pb-imgs/"}),
         (r'/', mhomeRequestHandler),
         (r'/booth', boothRequestHandler),
         (r'/ws-camera', cameraRequestHandler)
