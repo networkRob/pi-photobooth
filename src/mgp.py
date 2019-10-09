@@ -26,7 +26,7 @@ pic_out = "html/pb-imgs/"
 PHOTOSTRIP = 4
 FINALWIDTH = 400
 BORDERWIDTH = 10
-PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/21/2019"
+PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
 
 def getDATETIME():
     return(datetime.now().strftime("%Y%m%d-%H%M%S"))
