@@ -21,8 +21,9 @@ ws.onmessage = function (evt) {
         document.getElementById("baseID").innerHTML = received_msg['data'];
     }
     else if (received_msg['type'] == 'photo') {
-        tmp_output =  "<img src='pb-imgs/" + received_msg['data'] + "'>";
-        tmp_output += "<br /><br /><a href='../booth'>Snap Another?</a>";
+        tmp_output =  "<a href='../booth'>Snap Another?</a><br /><br />";
+        tmp_output +=  "<img src='" + received_msg['data'] + "'><br />";
+        document.getElementById("countdown").innerHTML = "";
         document.getElementById("baseID").innerHTML = tmp_output;
     }
     else {
