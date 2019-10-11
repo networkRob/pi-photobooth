@@ -36,10 +36,9 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         print("New connection from: {}".format(self.request.remote_ip))
         self.write_message(json.dumps({'type':'hello','data':"hello user"}))
-        
-    
+
     def on_message(self,message):
-        print("[{0}] Sent: {1}".format(self.request.remote_ip,message))        
+        print("[{0}] Sent: {1}".format(self.request.remote_ip,message))
         self.countdown()
 
     def countdown(self):
@@ -55,12 +54,14 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 count_down -= 1
             self.write_message(json.dumps({'type':'countdown','data':'Cheese!'}))
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
-            # photo_strip.append(cam_result[1])
-            photo_strip.append(cam_result[0])
-            print("Pictures saved to pb-imgs/{}".format(cam_result[1]))
+            photo_strip.append(cam_result['path'])
+            print("Pictures saved to pb-imgs/{}".format(cam_result['name']))
             pIND += 1
             if pIND < PHOTOSTRIP:
-                self.write_message(json.dumps({'type':'countdown','data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)}))
+                self.write_message(json.dumps({
+                    'type':'countdown',
+                    'data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)
+                }))
                 sleep(2)
         if photo_strip:
             final_img = createStrip(base_filename, photo_strip)
@@ -71,10 +72,10 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             print("There was an error :(")
         # Might need this? still get an error when trying to do it again
         del(cam_result)
- 
+
     def check_origin(self, origin):
-        return True 
-    
+        return(True)
+
 class mhomeRequestHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('html/index.html')
@@ -111,15 +112,15 @@ def createStrip(base_filename, imgPaths):
     return(new_fpath.replace('html/',''))
 
 def takePicture(cam_obj, base_filename):
-    # try:
-    # file_name = getDATETIME() + ".jpg"
     file_name = base_filename + ".jpg"
     file_path = pic_out + file_name
     cam_obj.capture(file_path)
     cam_obj.stop_preview()
-    return([file_path,file_name])
-    # except:
-    #     return(False)
+    img_result = {
+        'path': file_path,
+        'name': file_name,
+    }
+    return(img_result)
 
 if __name__ == "__main__":
     camera = PiCamera()
