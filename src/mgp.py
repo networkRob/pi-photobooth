@@ -108,7 +108,7 @@ def createStrip(base_filename, imgPaths):
     font = ImageFont.truetype(getcwd() + "/fonts/Verdana.ttf", 24)
     tmp_draw.text((BORDERWIDTH, ((f_y * PHOTOSTRIP) + (PHOTOSTRIP * BORDERWIDTH))), PMESSAGE, (255,0,255), font=font)
     new_fpath = pic_out + base_filename + "-Final.jpg"
-    result.save(new_fpath)
+    result.save(new_fpath, quality=100)
     return(new_fpath.replace('html/',''))
 
 def takePicture(cam_obj, base_filename):
