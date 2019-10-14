@@ -25,6 +25,7 @@ l_port = 8888
 # pi_resolution = (3280, 2464)
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
+UPLOAD_DESTINATION = "mTest/"
 PHOTOSTRIP = 4
 FINALWIDTH = 400
 BORDERWIDTH = 10
@@ -127,7 +128,7 @@ def takePicture(cam_obj, base_filename):
     return(img_result)
 
 def uploadPicture(picture_path):
-    p = Popen([UPLOADER, "-s", "upload", picture_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    p = Popen([UPLOADER, "-s", "upload", picture_path, UPLOAD_DESTINATION], stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output = p.communicate()[0].decode("utf-8")
     print(output)
 
