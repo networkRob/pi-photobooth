@@ -78,7 +78,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             # Upload the final image
-            up_result = uploadPicture('html' + final_img)
+            up_result = uploadPicture('html/' + final_img)
             print(up_result)
             self.write_message(json.dumps({'type':'photo','data':final_img}))
         else:
