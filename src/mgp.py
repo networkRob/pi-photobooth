@@ -7,7 +7,7 @@ Raspberrypi ZeroW web based photobooth.
 
 """
 __author__ = 'Rob Martin'
-__version__ = 0.2
+__version__ = 0.3
 
 # import tornado.httpserver
 import tornado.websocket
@@ -15,6 +15,7 @@ import tornado.ioloop
 import tornado.web
 import json
 from os import getcwd
+from subprocess import Popen, PIPE
 from PIL import Image, ImageFont, ImageDraw
 from picamera import PiCamera
 from time import sleep
@@ -23,7 +24,10 @@ from datetime import datetime, timedelta
 l_port = 8888
 # pi_resolution = (3280, 2464)
 pic_out = "html/pb-imgs/"
-PHOTOSTRIP = 4
+UPLOADER = "./dropbox_uploader.sh"
+UPLOAD_DESTINATION = "mTest/"
+# Number of photos to take
+PHOTOSTRIP = 3
 FINALWIDTH = 400
 BORDERWIDTH = 10
 PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
@@ -54,6 +58,8 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 count_down -= 1
             self.write_message(json.dumps({'type':'countdown','data':'Cheese!'}))
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
+            # Upload photo to Dropbox App
+            uploadPicture(cam_result['path'])
             photo_strip.append(cam_result['path'])
             print("Pictures saved to pb-imgs/{}".format(cam_result['name']))
             pIND += 1
@@ -62,11 +68,17 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                     'type':'countdown',
                     'data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)
                 }))
+                # Upload photo to Dropbox App
+                uploadPicture(cam_result['path'])
                 sleep(2)
+            else:
+                # Upload photo to Dropbox App
+                uploadPicture(cam_result['path'])
         if photo_strip:
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
-            # print("Pictures saved to\npb-imgs/{}".format("\npb-imgs/".join(photo_strip)))
+            # Upload the final image
+            uploadPicture('html/' + final_img)
             self.write_message(json.dumps({'type':'photo','data':final_img}))
         else:
             print("There was an error :(")
@@ -108,7 +120,7 @@ def createStrip(base_filename, imgPaths):
     font = ImageFont.truetype(getcwd() + "/fonts/Verdana.ttf", 24)
     tmp_draw.text((BORDERWIDTH, ((f_y * PHOTOSTRIP) + (PHOTOSTRIP * BORDERWIDTH))), PMESSAGE, (255,0,255), font=font)
     new_fpath = pic_out + base_filename + "-Final.jpg"
-    result.save(new_fpath)
+    result.save(new_fpath, quality=100)
     return(new_fpath.replace('html/',''))
 
 def takePicture(cam_obj, base_filename):
@@ -121,6 +133,11 @@ def takePicture(cam_obj, base_filename):
         'name': file_name,
     }
     return(img_result)
+
+def uploadPicture(picture_path):
+    p = Popen([UPLOADER, "-s", "upload", picture_path, UPLOAD_DESTINATION], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    output = p.communicate()[0].decode("utf-8")
+    return(output)
 
 if __name__ == "__main__":
     camera = PiCamera()
