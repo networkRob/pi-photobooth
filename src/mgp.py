@@ -75,7 +75,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 }))
                 sleep(2)
         if photo_strip:
-            self.write_message(json.dumps({'type':'countdown','data':'Creating photostrip!'}))
+            self.write_message(json.dumps({'type':'countdown','data':'All done, you can relax now<br />Creating photostrip...'}))
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             # Upload the final image
