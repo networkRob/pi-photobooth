@@ -22,7 +22,7 @@ from time import sleep
 from datetime import datetime, timedelta
 
 l_port = 8888
-# pi_resolution = (3280, 2464)
+pi_resolution = (1600, 2400)
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
@@ -108,20 +108,20 @@ def activateCamera():
 def createStrip(base_filename, imgPaths):
     b_x, b_y = Image.open(imgPaths[0]).size
     img_ratio = b_x / b_y
-    f_y = FINALHEIGHT
+    f_y = pi_resolution[1]
     f_x = int(f_y * img_ratio)
-    result = Image.new("RGB", (((FINALWIDTH * 2) + (3 * BORDERWIDTH)), ((FINALHEIGHT * 2) + (3 * BORDERWIDTH))),(255,255,255))
+    result = Image.new("RGB", (((pi_resolution[0] * 2) + (3 * BORDERWIDTH)), ((pi_resolution[1] * 2) + (3 * BORDERWIDTH))),(255,255,255))
     # f_x = FINALWIDTH
     # f_y = int(f_x / img_ratio)
     # result = Image.new("RGB", ((f_x + (2 * BORDERWIDTH)), (50 + (f_y * PHOTOSTRIP) + ((PHOTOSTRIP + 1) * BORDERWIDTH))))
     for index, fPath in enumerate(imgPaths):
         tmp_img = Image.open(fPath)
         tmp_img.thumbnail((f_x, f_y), Image.ANTIALIAS)
-        crop_x = (f_x - FINALWIDTH) / 2
+        crop_x = (f_x - pi_resolution[0]) / 2
         # Crop image to a square
-        tmp_img = tmp_img.crop((crop_x, 0, (crop_x + FINALWIDTH), FINALHEIGHT))
-        x = BORDERWIDTH + ((index % 2) * (FINALWIDTH + BORDERWIDTH))
-        y = BORDERWIDTH + ((index // 2) * (FINALHEIGHT + BORDERWIDTH))
+        tmp_img = tmp_img.crop((crop_x, 0, (crop_x + pi_resolution[0]), pi_resolution[1]))
+        x = BORDERWIDTH + ((index % 2) * (pi_resolution[0] + BORDERWIDTH))
+        y = BORDERWIDTH + ((index // 2) * (pi_resolution[1] + BORDERWIDTH))
         # x = BORDERWIDTH
         # y = index * f_y + ((index + 1) * BORDERWIDTH)
         w, h = tmp_img.size
@@ -131,15 +131,15 @@ def createStrip(base_filename, imgPaths):
     l_x, l_y = logo_img.size
     logo_ratio = l_x / l_y
     if logo_ratio > 1.0:
-        n_height = int(FINALHEIGHT / logo_ratio)
-        logo_img = logo_img.resize((FINALWIDTH, n_height))
-        x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH))
-        y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (FINALHEIGHT + BORDERWIDTH)) + int((FINALHEIGHT - n_height) / 2)
+        n_height = int(pi_resolution[1] / logo_ratio)
+        logo_img = logo_img.resize((pi_resolution[0], n_height))
+        x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (pi_resolution[0] + BORDERWIDTH))
+        y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (pi_resolution[1] + BORDERWIDTH)) + int((pi_resolution[1] - n_height) / 2)
     else:
-        n_width = int(FINALWIDTH / logo_ratio)
-        logo_img = logo_img.resize((n_width, FINALHEIGHT))
-        x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH)) + int((FINALWIDTH - n_width) / 2)
-        y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (FINALHEIGHT + BORDERWIDTH))
+        n_width = int(pi_resolution[0] / logo_ratio)
+        logo_img = logo_img.resize((n_width, pi_resolution[1]))
+        x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (pi_resolution[0] + BORDERWIDTH)) + int((pi_resolution[0] - n_width) / 2)
+        y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (pi_resolution[1] + BORDERWIDTH))
     w, h = logo_img.size
     # x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH))
     # y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (FINALHEIGHT + BORDERWIDTH))
