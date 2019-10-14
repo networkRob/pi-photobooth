@@ -28,8 +28,8 @@ UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
 # Number of photos to take
 PHOTOSTRIP = 3
-FINALWIDTH = 1000
-FINALHEIGHT = 1000
+FINALWIDTH = 800
+FINALHEIGHT = 800
 BORDERWIDTH = 10
 # Party Specific
 PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
