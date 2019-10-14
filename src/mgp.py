@@ -15,6 +15,7 @@ import tornado.ioloop
 import tornado.web
 import json
 from os import getcwd
+from subprocess import Popen, PIPE
 from PIL import Image, ImageFont, ImageDraw
 from picamera import PiCamera
 from time import sleep
@@ -23,6 +24,7 @@ from datetime import datetime, timedelta
 l_port = 8888
 # pi_resolution = (3280, 2464)
 pic_out = "html/pb-imgs/"
+UPLOADER = "./dropbox_uploader.sh"
 PHOTOSTRIP = 4
 FINALWIDTH = 400
 BORDERWIDTH = 10
@@ -54,6 +56,8 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 count_down -= 1
             self.write_message(json.dumps({'type':'countdown','data':'Cheese!'}))
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
+            # Upload photo to Dropbox App
+            uploadPicture(cam_result['path'])
             photo_strip.append(cam_result['path'])
             print("Pictures saved to pb-imgs/{}".format(cam_result['name']))
             pIND += 1
@@ -121,6 +125,11 @@ def takePicture(cam_obj, base_filename):
         'name': file_name,
     }
     return(img_result)
+
+def uploadPicture(picture_path):
+    p = Popen([UPLOADER, "-s", "upload", picture_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    output = p.communicate()[0].decode("utf-8")
+    print(output)
 
 if __name__ == "__main__":
     camera = PiCamera()
