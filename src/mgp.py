@@ -112,9 +112,6 @@ def createStrip(base_filename, imgPaths):
     f_y = pi_resolution[1]
     f_x = int(f_y * img_ratio)
     result = Image.new("RGB", (((pi_resolution[0] * 2) + (3 * BORDERWIDTH)), ((pi_resolution[1] * 2) + (3 * BORDERWIDTH))),(255,255,255))
-    # f_x = FINALWIDTH
-    # f_y = int(f_x / img_ratio)
-    # result = Image.new("RGB", ((f_x + (2 * BORDERWIDTH)), (50 + (f_y * PHOTOSTRIP) + ((PHOTOSTRIP + 1) * BORDERWIDTH))))
     for index, fPath in enumerate(imgPaths):
         tmp_img = Image.open(fPath)
         tmp_img.thumbnail((f_x, f_y), Image.ANTIALIAS)
@@ -123,8 +120,6 @@ def createStrip(base_filename, imgPaths):
         tmp_img = tmp_img.crop((crop_x, 0, (crop_x + pi_resolution[0]), pi_resolution[1]))
         x = BORDERWIDTH + ((index % 2) * (pi_resolution[0] + BORDERWIDTH))
         y = BORDERWIDTH + ((index // 2) * (pi_resolution[1] + BORDERWIDTH))
-        # x = BORDERWIDTH
-        # y = index * f_y + ((index + 1) * BORDERWIDTH)
         w, h = tmp_img.size
         result.paste(tmp_img, (x, y, x + w, y + h))
     # Open logo and get information
@@ -142,12 +137,7 @@ def createStrip(base_filename, imgPaths):
         x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (pi_resolution[0] + BORDERWIDTH)) + int((pi_resolution[0] - n_width) / 2)
         y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (pi_resolution[1] + BORDERWIDTH))
     w, h = logo_img.size
-    # x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH))
-    # y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (FINALHEIGHT + BORDERWIDTH))
     result.paste(logo_img, (x, y, x + w, y + h))
-    # tmp_draw = ImageDraw.Draw(result)
-    # font = ImageFont.truetype(getcwd() + "/fonts/Verdana.ttf", 24)
-    # tmp_draw.text((BORDERWIDTH, ((f_y * PHOTOSTRIP) + (PHOTOSTRIP * BORDERWIDTH))), PMESSAGE, (255,0,255), font=font)
     new_fpath = pic_out + base_filename + "-Final.jpg"
     result = result.resize(pi_resolution)
     result.save(new_fpath, quality=95)
