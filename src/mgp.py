@@ -22,15 +22,19 @@ from time import sleep
 from datetime import datetime, timedelta
 
 l_port = 8888
-# pi_resolution = (3280, 2464)
+# pi_resolution = (1600, 2400)
+pi_resolution = (1181, 1772)
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
 # Number of photos to take
 PHOTOSTRIP = 3
-FINALWIDTH = 400
+FINALWIDTH = 800
+FINALHEIGHT = 800
 BORDERWIDTH = 10
+# Party Specific
 PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
+PLOGO = "imgs/fin-logo.jpg"
 
 def getDATETIME():
     return(datetime.now().strftime("%Y%m%d-%H%M%S"))
@@ -105,22 +109,38 @@ def activateCamera():
 def createStrip(base_filename, imgPaths):
     b_x, b_y = Image.open(imgPaths[0]).size
     img_ratio = b_x / b_y
-    f_x = FINALWIDTH
-    f_y = int(f_x / img_ratio)
-    result = Image.new("RGB", ((f_x + (2 * BORDERWIDTH)), (50 + (f_y * PHOTOSTRIP) + ((PHOTOSTRIP + 1) * BORDERWIDTH))))
+    f_y = pi_resolution[1]
+    f_x = int(f_y * img_ratio)
+    result = Image.new("RGB", (((pi_resolution[0] * 2) + (3 * BORDERWIDTH)), ((pi_resolution[1] * 2) + (3 * BORDERWIDTH))),(255,255,255))
     for index, fPath in enumerate(imgPaths):
         tmp_img = Image.open(fPath)
         tmp_img.thumbnail((f_x, f_y), Image.ANTIALIAS)
-        x = BORDERWIDTH
-        y = index * f_y + ((index + 1) * BORDERWIDTH)
+        crop_x = (f_x - pi_resolution[0]) / 2
+        # Crop image to a square
+        tmp_img = tmp_img.crop((crop_x, 0, (crop_x + pi_resolution[0]), pi_resolution[1]))
+        x = BORDERWIDTH + ((index % 2) * (pi_resolution[0] + BORDERWIDTH))
+        y = BORDERWIDTH + ((index // 2) * (pi_resolution[1] + BORDERWIDTH))
         w, h = tmp_img.size
         result.paste(tmp_img, (x, y, x + w, y + h))
-    # Try adding text
-    tmp_draw = ImageDraw.Draw(result)
-    font = ImageFont.truetype(getcwd() + "/fonts/Verdana.ttf", 24)
-    tmp_draw.text((BORDERWIDTH, ((f_y * PHOTOSTRIP) + (PHOTOSTRIP * BORDERWIDTH))), PMESSAGE, (255,0,255), font=font)
+    # Open logo and get information
+    logo_img = Image.open(PLOGO)
+    l_x, l_y = logo_img.size
+    logo_ratio = l_x / l_y
+    if logo_ratio > 1.0:
+        n_height = int(pi_resolution[1] / logo_ratio)
+        logo_img = logo_img.resize((pi_resolution[0], n_height))
+        x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (pi_resolution[0] + BORDERWIDTH))
+        y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (pi_resolution[1] + BORDERWIDTH)) + int((pi_resolution[1] - n_height) / 2)
+    else:
+        n_width = int(pi_resolution[0] / logo_ratio)
+        logo_img = logo_img.resize((n_width, pi_resolution[1]))
+        x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (pi_resolution[0] + BORDERWIDTH)) + int((pi_resolution[0] - n_width) / 2)
+        y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (pi_resolution[1] + BORDERWIDTH))
+    w, h = logo_img.size
+    result.paste(logo_img, (x, y, x + w, y + h))
     new_fpath = pic_out + base_filename + "-Final.jpg"
-    result.save(new_fpath, quality=100)
+    result = result.resize(pi_resolution)
+    result.save(new_fpath, quality=95)
     return(new_fpath.replace('html/',''))
 
 def takePicture(cam_obj, base_filename):
@@ -140,7 +160,7 @@ def uploadPicture(picture_path):
     return(output)
 
 if __name__ == "__main__":
-    camera = PiCamera()
+    camera = PiCamera(resolution=pi_resolution)
     app = tornado.web.Application([
         (r'/pb-imgs/(.*)', tornado.web.StaticFileHandler, {'path': "html/pb-imgs/"}),
         (r'/', mhomeRequestHandler),
