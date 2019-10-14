@@ -126,10 +126,21 @@ def createStrip(base_filename, imgPaths):
         # y = index * f_y + ((index + 1) * BORDERWIDTH)
         w, h = tmp_img.size
         result.paste(tmp_img, (x, y, x + w, y + h))
-    # Try adding text
-    tmp_draw = ImageDraw.Draw(result)
-    font = ImageFont.truetype(getcwd() + "/fonts/Verdana.ttf", 24)
-    tmp_draw.text((BORDERWIDTH, ((f_y * PHOTOSTRIP) + (PHOTOSTRIP * BORDERWIDTH))), PMESSAGE, (255,0,255), font=font)
+    # Open logo and get information
+    logo_img = Image.open(PLOGO)
+    l_x, l_y = logo_img.size
+    logo_ratio = l_x / l_y
+    if logo_ratio > 1.0:
+        logo_img = logo_img.resize((FINALWIDTH, FINALHEIGHT / logo_ratio))
+    else:
+        logo_img = logo_img.resize((FINALWIDTH / logo_ratio, FINALHEIGHT))
+    w, h = logo_ratio.size
+    x = BORDERWIDTH + (((PHOTOSTRIP - 1) % 2) * (FINALWIDTH + BORDERWIDTH))
+    y = BORDERWIDTH + (((PHOTOSTRIP -1 ) // 2) * (FINALHEIGHT + BORDERWIDTH))
+    result.paste(logo_img, (x, y, x + w, y + h))
+    # tmp_draw = ImageDraw.Draw(result)
+    # font = ImageFont.truetype(getcwd() + "/fonts/Verdana.ttf", 24)
+    # tmp_draw.text((BORDERWIDTH, ((f_y * PHOTOSTRIP) + (PHOTOSTRIP * BORDERWIDTH))), PMESSAGE, (255,0,255), font=font)
     new_fpath = pic_out + base_filename + "-Final.jpg"
     result.save(new_fpath, quality=100)
     return(new_fpath.replace('html/',''))
