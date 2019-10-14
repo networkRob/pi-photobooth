@@ -29,6 +29,7 @@ UPLOAD_DESTINATION = "mTest/"
 # Number of photos to take
 PHOTOSTRIP = 3
 FINALWIDTH = 800
+FINALHEIGHT = 800
 BORDERWIDTH = 10
 # Party Specific
 PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
@@ -107,14 +108,22 @@ def activateCamera():
 def createStrip(base_filename, imgPaths):
     b_x, b_y = Image.open(imgPaths[0]).size
     img_ratio = b_x / b_y
-    f_x = FINALWIDTH
-    f_y = int(f_x / img_ratio)
-    result = Image.new("RGB", ((f_x + (2 * BORDERWIDTH)), (50 + (f_y * PHOTOSTRIP) + ((PHOTOSTRIP + 1) * BORDERWIDTH))))
+    f_y = FINALHEIGHT
+    f_x = int(f_y * img_ratio)
+    result = Image.new("RGP", (((FINALWIDTH * 2) + (3 * BORDERWIDTH)), ((FINALHEIGHT * 2) + (3 * BORDERWIDTH))))
+    # f_x = FINALWIDTH
+    # f_y = int(f_x / img_ratio)
+    # result = Image.new("RGB", ((f_x + (2 * BORDERWIDTH)), (50 + (f_y * PHOTOSTRIP) + ((PHOTOSTRIP + 1) * BORDERWIDTH))))
     for index, fPath in enumerate(imgPaths):
         tmp_img = Image.open(fPath)
         tmp_img.thumbnail((f_x, f_y), Image.ANTIALIAS)
-        x = BORDERWIDTH
-        y = index * f_y + ((index + 1) * BORDERWIDTH)
+        crop_x = (f_x - FINALWIDTH) / 2
+        # Crop image to a square
+        tmp_img = tmp_img.crop((crop_x, 0, (crop_x + FINALWIDTH), FINALHEIGHT))
+        x = BORDERWIDTH + ((index % 2) * (FINALWIDTH + BORDERWIDTH))
+        y = BORDERWIDTH + ((index // 2) * (FINALHEIGHT + BORDERWIDTH))
+        # x = BORDERWIDTH
+        # y = index * f_y + ((index + 1) * BORDERWIDTH)
         w, h = tmp_img.size
         result.paste(tmp_img, (x, y, x + w, y + h))
     # Try adding text
