@@ -28,8 +28,8 @@ UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
 # Number of photos to take
 PHOTOSTRIP = 3
-FINALWIDTH = 800
-FINALHEIGHT = 800
+FINALWIDTH = 1000
+FINALHEIGHT = 1000
 BORDERWIDTH = 10
 # Party Specific
 PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
@@ -110,7 +110,7 @@ def createStrip(base_filename, imgPaths):
     img_ratio = b_x / b_y
     f_y = FINALHEIGHT
     f_x = int(f_y * img_ratio)
-    result = Image.new("RGB", (((FINALWIDTH * 2) + (3 * BORDERWIDTH)), ((FINALHEIGHT * 2) + (3 * BORDERWIDTH))),(255,255,0))
+    result = Image.new("RGB", (((FINALWIDTH * 2) + (3 * BORDERWIDTH)), ((FINALHEIGHT * 2) + (3 * BORDERWIDTH))),(255,255,255))
     # f_x = FINALWIDTH
     # f_y = int(f_x / img_ratio)
     # result = Image.new("RGB", ((f_x + (2 * BORDERWIDTH)), (50 + (f_y * PHOTOSTRIP) + ((PHOTOSTRIP + 1) * BORDERWIDTH))))
