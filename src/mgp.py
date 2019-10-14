@@ -68,12 +68,17 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                     'type':'countdown',
                     'data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)
                 }))
+                # Upload photo to Dropbox App
+                uploadPicture(cam_result['path'])
                 sleep(2)
+            else:
+                # Upload photo to Dropbox App
+                uploadPicture(cam_result['path'])
         if photo_strip:
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             # Upload the final image
-            uploadPicture(final_img)
+            up_result = uploadPicture('html' + final_img)
             self.write_message(json.dumps({'type':'photo','data':final_img}))
         else:
             print("There was an error :(")
