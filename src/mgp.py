@@ -148,6 +148,7 @@ def createStrip(base_filename, imgPaths):
 def takePicture(cam_obj, base_filename):
     file_name = base_filename + ".jpg"
     file_path = pic_out + file_name
+    sleep(1)
     cam_obj.capture(file_path)
     cam_obj.stop_preview()
     img_result = {
