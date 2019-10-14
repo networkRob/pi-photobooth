@@ -7,7 +7,7 @@ Raspberrypi ZeroW web based photobooth.
 
 """
 __author__ = 'Rob Martin'
-__version__ = 0.2
+__version__ = 0.3
 
 # import tornado.httpserver
 import tornado.websocket
@@ -27,7 +27,7 @@ pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
 # Number of photos to take
-PHOTOSTRIP = 2
+PHOTOSTRIP = 3
 FINALWIDTH = 400
 BORDERWIDTH = 10
 PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
@@ -78,8 +78,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             # Upload the final image
-            up_result = uploadPicture('html/' + final_img)
-            print(up_result)
+            uploadPicture('html/' + final_img)
             self.write_message(json.dumps({'type':'photo','data':final_img}))
         else:
             print("There was an error :(")
