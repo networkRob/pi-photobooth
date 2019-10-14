@@ -26,7 +26,8 @@ l_port = 8888
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
-PHOTOSTRIP = 4
+# Number of photos to take
+PHOTOSTRIP = 3
 FINALWIDTH = 400
 BORDERWIDTH = 10
 PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
@@ -71,7 +72,8 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         if photo_strip:
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
-            # print("Pictures saved to\npb-imgs/{}".format("\npb-imgs/".join(photo_strip)))
+            # Upload the final image
+            uploadPicture(final_img)
             self.write_message(json.dumps({'type':'photo','data':final_img}))
         else:
             print("There was an error :(")
