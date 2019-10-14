@@ -135,8 +135,8 @@ def createStrip(base_filename, imgPaths):
     else:
         logo_img = logo_img.resize((int(FINALWIDTH / logo_ratio), FINALHEIGHT))
     w, h = logo_img.size
-    x = BORDERWIDTH + (((PHOTOSTRIP - 1) % 2) * (FINALWIDTH + BORDERWIDTH))
-    y = BORDERWIDTH + (((PHOTOSTRIP -1 ) // 2) * (FINALHEIGHT + BORDERWIDTH))
+    x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH))
+    y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (FINALHEIGHT + BORDERWIDTH))
     result.paste(logo_img, (x, y, x + w, y + h))
     # tmp_draw = ImageDraw.Draw(result)
     # font = ImageFont.truetype(getcwd() + "/fonts/Verdana.ttf", 24)
