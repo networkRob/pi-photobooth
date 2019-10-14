@@ -110,7 +110,7 @@ def createStrip(base_filename, imgPaths):
     img_ratio = b_x / b_y
     f_y = FINALHEIGHT
     f_x = int(f_y * img_ratio)
-    result = Image.new("RGB", (((FINALWIDTH * 2) + (3 * BORDERWIDTH)), ((FINALHEIGHT * 2) + (3 * BORDERWIDTH))))
+    result = Image.new("RGB", (((FINALWIDTH * 2) + (3 * BORDERWIDTH)), ((FINALHEIGHT * 2) + (3 * BORDERWIDTH))),(255,255,0))
     # f_x = FINALWIDTH
     # f_y = int(f_x / img_ratio)
     # result = Image.new("RGB", ((f_x + (2 * BORDERWIDTH)), (50 + (f_y * PHOTOSTRIP) + ((PHOTOSTRIP + 1) * BORDERWIDTH))))
