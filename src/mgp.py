@@ -168,7 +168,7 @@ def uploadPicture(picture_path):
     return(output)
 
 if __name__ == "__main__":
-    camera = PiCamera()
+    camera = PiCamera(resolution=pi_resolution)
     app = tornado.web.Application([
         (r'/pb-imgs/(.*)', tornado.web.StaticFileHandler, {'path': "html/pb-imgs/"}),
         (r'/', mhomeRequestHandler),
