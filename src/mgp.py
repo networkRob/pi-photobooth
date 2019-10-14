@@ -22,8 +22,8 @@ from time import sleep
 from datetime import datetime, timedelta
 
 l_port = 8888
-# pi_resolution = (1600, 2400)
-pi_resolution = (1181, 1772)
+pi_resolution = (394, 591)
+# pi_resolution = (1181, 1772)
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
