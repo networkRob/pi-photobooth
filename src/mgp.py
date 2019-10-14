@@ -134,11 +134,11 @@ def createStrip(base_filename, imgPaths):
         n_height = int(FINALHEIGHT / logo_ratio)
         logo_img = logo_img.resize((FINALWIDTH, n_height))
         x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH))
-        y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (FINALHEIGHT + BORDERWIDTH)) + ((FINALHEIGHT - n_height) / 2)
+        y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (FINALHEIGHT + BORDERWIDTH)) + int((FINALHEIGHT - n_height) / 2)
     else:
         n_width = int(FINALWIDTH / logo_ratio)
         logo_img = logo_img.resize((n_width, FINALHEIGHT))
-        x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH)) + ((FINALWIDTH - n_width) / 2)
+        x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH)) + int((FINALWIDTH - n_width) / 2)
         y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (FINALHEIGHT + BORDERWIDTH))
     w, h = logo_img.size
     # x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (FINALWIDTH + BORDERWIDTH))
