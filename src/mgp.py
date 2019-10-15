@@ -54,7 +54,10 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self,message):
         print("[{0}] Sent: {1}".format(self.request.remote_ip,message))
-        self.countdown()
+        if message['type'] == 'hello':
+            self.countdown()
+        elif message['type'] == 'print':
+            print('Printer requested: {}'.format(message))
 
     def countdown(self):
         picam = activateCamera()
