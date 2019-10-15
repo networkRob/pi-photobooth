@@ -19,9 +19,13 @@ a {
 	text-decoration: none;
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 1em;
-    padding: 6px 4px;
+    padding: 6px;
     margin: 4px;
     border-radius: 4px;
+}
+
+a:hover {
+    color: yellow;
 }
 
 #bodyContent {
