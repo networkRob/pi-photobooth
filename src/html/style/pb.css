@@ -61,7 +61,19 @@ a:hover {
 }
 
 #countdown {
+    text-align: center;
     font-size: 2em;
     color: red;
+    font-family: jungle;
+}
+
+#title {
+    text-align: center;
+    font-family: jungle;
+    color: yellow;
+}
+
+#baseID {
+    text-align: center;
     font-family: jungle;
 }
