@@ -79,12 +79,16 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         while pIND < PHOTOSTRIP:
             count_down = 3
             while count_down > 0:
-                self.write_message({'type':'countdown','data':count_down})
+                self.write_message({
+                    'type':'countdown',
+                    'data':count_down
+                })
                 sleep(1)
                 count_down -= 1
             self.write_message({
                 'type':'countdown',
-                'data': "{0} and<br /> {1}".format(MSGSNAP,MSGREADY[pIND])})
+                'data': MSGSNAP
+            })
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
             self.write_message({
                 'type':'update',
@@ -99,7 +103,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             pIND += 1
             if pIND < PHOTOSTRIP:
                 self.write_message({
-                    'type': 'countdown',
+                    'type': 'ready',
                     'data': MSGLEFT.format(PHOTOSTRIP - pIND)
                 })
                 sleep(4)
@@ -109,14 +113,20 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 })
                 sleep(5)
         if photo_strip:
-            self.write_message({'type':'countdown','data': MSGDONE})
+            self.write_message({
+                'type':'countdown',
+                'data': MSGDONE
+            })
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             printImage(1, 'html/{}'.format(final_img))
             LASTPRINTED = 'html/{}'.format(final_img)
             # Upload the final image
             uploadPicture('html/' + final_img)
-            self.write_message({'type':'photo','data':final_img})
+            self.write_message({
+                'type':'photo',
+                'data':final_img
+            })
         else:
             print("There was an error :(")
         # Might need this? still get an error when trying to do it again
