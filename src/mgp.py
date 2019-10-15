@@ -15,6 +15,7 @@ import tornado.ioloop
 import tornado.web
 import base64
 import io
+import json
 from os import getcwd
 from subprocess import Popen, PIPE
 from PIL import Image
@@ -22,25 +23,28 @@ from picamera import PiCamera
 from time import sleep
 from datetime import datetime, timedelta
 
+# Party Specific globals
+PLOGO = "imgs/fin-logo.jpg"
+MSGSNAP = "Cheese!"
+MSGLEFT = 'Here we go again!<br />{} more to go...'
+MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
+MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
+
+# Camera Specifics
 l_port = 8888
-# pi_resolution = (1800, 1200)
 pi_resolution = (1200, 1800)
 pi_thumbnail = (600, 900)
+
+# Global Utilities
+PRINTERNAME = 'Canon_SELPHY_CP1300-1'
+PRINTENABLED = False
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
+LASTPRINTED = ''
 # Number of photos to take
 PHOTOSTRIP = 3
-FINALWIDTH = 800
-FINALHEIGHT = 800
 BORDERWIDTH = 10
-# Party Specific
-PLOGO = "imgs/fin-logo.jpg"
-
-# Messages
-MSGSNAP = "Cheese!"
-MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
-MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
 
 def getDATETIME():
     return(datetime.now().strftime("%Y%m%d-%H%M%S"))
@@ -53,9 +57,16 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self,message):
         print("[{0}] Sent: {1}".format(self.request.remote_ip,message))
-        self.countdown()
+        recv_msg = json.loads(message)
+        if recv_msg['type'] == 'hello':
+            self.countdown()
+        elif recv_msg['type'] == 'print':
+            print('Printer requested: {}'.format(recv_msg))
+            if LASTPRINTED:
+                printImage(int(recv_msg['data']),LASTPRINTED)
 
     def countdown(self):
+        global LASTPRINTED
         picam = activateCamera()
         photo_strip = []
         pIND = 0
@@ -81,12 +92,12 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             pIND += 1
             if pIND < PHOTOSTRIP:
                 self.write_message({
-                    'type':'countdown',
-                    'data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)
+                    'type': 'countdown',
+                    'data': MSGLEFT.format(PHOTOSTRIP - pIND)
                 })
                 sleep(2)
                 self.write_message({
-                    'type':'countdown',
+                    'type': 'countdown',
                     'data': MSGREADY[pIND-1]
                 })
                 sleep(4)
@@ -94,6 +105,8 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             self.write_message({'type':'countdown','data': MSGDONE})
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
+            printImage(1, 'html/{}'.format(final_img))
+            LASTPRINTED = 'html/{}'.format(final_img)
             # Upload the final image
             uploadPicture('html/' + final_img)
             self.write_message({'type':'photo','data':final_img})
@@ -180,6 +193,17 @@ def uploadPicture(picture_path):
     p = Popen([UPLOADER, "-s", "upload", picture_path, UPLOAD_DESTINATION], stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output = p.communicate()[0].decode("utf-8")
     return(output)
+
+def printImage(copies, picture_path):
+    copy_string = '{} copy'.format(copies) if copies == 1 else '{} copies'.format(copies)
+    print("Printing {0} of {1}".format(copy_string, picture_path))
+    if PRINTENABLED:
+        print('Sending to {}'.format(PRINTERNAME))
+        p = Popen(["lp", "-n", copies, "-d", PRINTERNAME, picture_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output = p.communicate()[0].decode("utf-8")
+        return(output)
+    else:
+        print("Printing to {} is currently disabled".format(PRINTERNAME))
 
 if __name__ == "__main__":
     camera = PiCamera(resolution=pi_resolution)
