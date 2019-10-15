@@ -64,12 +64,12 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 count_down -= 1
             self.write_message(json.dumps({'type':'countdown','data':'Cheese!'}))
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
-            self.write_message(json.dumps({
+            self.write_message({
                 'type':'update',
                 'data':{
                     'msg':'Picture taken!',
                     'imgData': bencode64(cam_result['path'])
-                }}))
+                }})
             # Upload photo to Dropbox App
             uploadPicture(cam_result['path'])
             photo_strip.append(cam_result['path'])
