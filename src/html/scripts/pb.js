@@ -6,9 +6,7 @@ var ws = new WebSocket(mURL);
 ws.onopen = function()
 {
     // Web Socket is connected, send data using send()
-    // ws.send("Hello Test Camera");
     ws.send(JSON.stringify({type:"Hello",data:"Hello Test Camera"}));
-    // alert("Message is sent...");
 };
 ws.onmessage = function (evt) {
     var re_data = evt.data;

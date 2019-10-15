@@ -45,7 +45,6 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         print("New connection from: {}".format(self.request.remote_ip))
-        # self.write_message(json.dumps({'type':'hello','data':"hello user"}))
         self.write_message({'type':'hello','data':"hello user"})
 
     def on_message(self,message):
