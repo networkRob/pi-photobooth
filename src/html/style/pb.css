@@ -6,7 +6,11 @@ body {
 	padding: 5px 0;
 }
 
-.bodyContent {
+img {
+    width: 800px;
+}
+
+#bodyContent {
     width: 980px;
 	height:100%;
 	margin: 0 auto;
@@ -14,6 +18,3 @@ body {
     background-color: white;
 }
 
-img {
-    width: 800px;
-}
