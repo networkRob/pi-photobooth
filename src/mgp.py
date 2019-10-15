@@ -23,7 +23,9 @@ from time import sleep
 from datetime import datetime, timedelta
 
 l_port = 8888
-pi_resolution = (1800, 1200)
+# pi_resolution = (1800, 1200)
+pi_resolution = (1200, 1800)
+pi_thumbnail = (600, 900)
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
@@ -114,7 +116,7 @@ class boothRequestHandler(tornado.web.RequestHandler):
 def bencode64(filePath):
     tmp_buff = io.BytesIO()
     img = Image.open(filePath)
-    img = img.resize((800,600))
+    img = img.resize(pi_thumbnail)
     img.save(tmp_buff, format="JPEG")
     tmp_buff.seek(0)
     imgData = base64.b64encode(tmp_buff.read())
