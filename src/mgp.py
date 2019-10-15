@@ -24,7 +24,6 @@ from datetime import datetime, timedelta
 
 l_port = 8888
 pi_resolution = (1800, 1200)
-# pi_resolution = (1181, 1772)
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
@@ -34,7 +33,6 @@ FINALWIDTH = 800
 FINALHEIGHT = 800
 BORDERWIDTH = 10
 # Party Specific
-PMESSAGE = "Finley's 2 Wild Birthday Party!\n10/19/2019"
 PLOGO = "imgs/fin-logo.jpg"
 
 def getDATETIME():
