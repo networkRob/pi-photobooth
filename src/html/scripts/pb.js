@@ -52,9 +52,9 @@ ws.onmessage = function (evt) {
     }
     // Final photostrip displayed
     else if (received_msg['type'] == 'photo') {
-        tmp_output =  "<a href='../booth'>Snap Another?</a><br /><br />";
+        tmp_output =  "<a href='../booth'>Snap Another?</a><br />";
         tmp_output += "<p><form action='javascript:void(0);'>Print More Copies? (1 - 3)<br /> <input type='number' value='1' id='pcopy' min='1' max='3'> <a onclick='printMore()'>Print More!</a></form></p>"
-        tmp_output += "<br /><br />";
+        tmp_output += "<br />";
         document.getElementById("title").innerHTML = "";
         document.getElementById("msgUpdate").innerHTML = "";
         document.getElementById("countdown").innerHTML = "";
