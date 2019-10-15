@@ -65,6 +65,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 printImage(recv_msg['data'],LASTPRINTED)
 
     def countdown(self):
+        global LASTPRINTED
         picam = activateCamera()
         photo_strip = []
         pIND = 0
