@@ -60,10 +60,10 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         while pIND < PHOTOSTRIP:
             count_down = 3
             while count_down > 0:
-                self.write_message(json.dumps({'type':'countdown','data':count_down}))
+                self.write_message({'type':'countdown','data':count_down})
                 sleep(1)
                 count_down -= 1
-            self.write_message(json.dumps({'type':'countdown','data':'Cheese!'}))
+            self.write_message({'type':'countdown','data':'Cheese!'})
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
             self.write_message({
                 'type':'update',
@@ -77,18 +77,18 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             print("Pictures saved to pb-imgs/{}".format(cam_result['name']))
             pIND += 1
             if pIND < PHOTOSTRIP:
-                self.write_message(json.dumps({
+                self.write_message({
                     'type':'countdown',
                     'data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)
-                }))
+                })
                 sleep(2)
         if photo_strip:
-            self.write_message(json.dumps({'type':'countdown','data':'All done, you can relax now<br />Creating photostrip...'}))
+            self.write_message({'type':'countdown','data':'All done, you can relax now<br />Creating photostrip...'})
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             # Upload the final image
             uploadPicture('html/' + final_img)
-            self.write_message(json.dumps({'type':'photo','data':final_img}))
+            self.write_message({'type':'photo','data':final_img})
         else:
             print("There was an error :(")
         # Might need this? still get an error when trying to do it again
@@ -113,13 +113,9 @@ def bencode64(filePath):
     tmp_buff.seek(0)
     imgData = base64.b64encode(tmp_buff.read())
     imgData = imgData.decode('utf-8')
-    # with open(filePath, 'rb') as imgFile:
-    #     imgData = base64.b64encode(imgFile.read())
-    # imgData = imgData.decode('utf-8')
     return(imgData)
 
 def activateCamera():
-    # camera.resolution = pi_resolution
     camera.start_preview()
     return(camera)
 
