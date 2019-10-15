@@ -106,7 +106,6 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                     'type': 'ready',
                     'data': MSGREADY[pIND]
                 })
-                print(MSGREADY[pIND])
                 sleep(5)
         if photo_strip:
             self.write_message({'type':'countdown','data': MSGDONE})

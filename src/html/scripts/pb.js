@@ -20,7 +20,7 @@ ws.onmessage = function (evt) {
     // Pre Countdown
     else if ( received_msg['type'] == 'ready') {
         document.getElementById("title").innerHTML = "Get Ready!";
-        document.getElementById("countdown").innerHTML = received_msg['data']['msg'];
+        document.getElementById("countdown").innerHTML = received_msg['data'];
         document.getElementById("baseID").innerHTML = "";
         // document.getElementById("imgView").innerHTML = "";
     }
