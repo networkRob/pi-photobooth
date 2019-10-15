@@ -35,3 +35,8 @@ a:hover {
     padding: 25px;
     background-color: white;
 }
+
+#countdown {
+    font-size: 2em;
+    color: red;
+}

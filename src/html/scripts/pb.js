@@ -11,22 +11,28 @@ ws.onopen = function()
 ws.onmessage = function (evt) {
     var re_data = evt.data;
     var received_msg = JSON.parse(re_data);
-    if ( received_msg['type'] == 'countdown') {
-        document.getElementById("countdown").innerHTML = received_msg['data'];
-        document.getElementById("baseID").innerHTML = "";
-    }
-    else if (received_msg['type'] == 'hello') {
+    if (received_msg['type'] == 'hello') {
         document.getElementById("baseID").innerHTML = received_msg['data'];
     }
+    // Countdown messages displayed
+    else if ( received_msg['type'] == 'countdown') {
+        document.getElementById("countdown").innerHTML = received_msg['data'];
+        document.getElementById("baseID").innerHTML = "";
+        document.getElementById("title").innerHTML = "Get Ready!";
+    }
+    // Intermediate photo displayed
+    else if ( received_msg['type'] == 'update') {
+        document.getElementById("countdown").innerHTML = received_msg['data']['msg'];
+        document.getElementById("title").innerHTML = "";
+        document.getElementById("imgView").innerHTML = "<img src='data:image/png;base64," + received_msg['data']['imgData'] + "'/><br />";
+    }
+    // Final photostrip displayed
     else if (received_msg['type'] == 'photo') {
         tmp_output =  "<a href='../booth'>Snap Another?</a><br /><br />";
         document.getElementById("imgView").innerHTML =  "<img src='" + received_msg['data'] + "'><br />";
         document.getElementById("countdown").innerHTML = "";
         document.getElementById("baseID").innerHTML = tmp_output;
-    }
-    else if ( received_msg['type'] == 'update') {
-        document.getElementById("countdown").innerHTML = received_msg['data']['msg'];
-        document.getElementById("imgView").innerHTML = "<img src='data:image/png;base64," + received_msg['data']['imgData'] + "'/><br />";
+        document.getElementById("title").innerHTML = "";
     }
     else {
         document.getElementById("baseID").innerHTML = received_msg['data'];
