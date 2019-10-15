@@ -68,7 +68,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 'type':'update',
                 'data':{
                     'msg':'Picture taken!',
-                    'imgData': bencode64(cam_result['path'])
+                    'imgData': bencode64(cam_result['path']).decode('utf-8')
                 }})
             # Upload photo to Dropbox App
             uploadPicture(cam_result['path'])
