@@ -1,5 +1,17 @@
 body {
     background-color: lightgrey;
+    width: 980px;
+	height:100%;
+	margin: 0 auto;
+	padding: 5px 0;
+}
+
+.bodyContent {
+    width: 980px;
+	height:100%;
+	margin: 0 auto;
+    padding: 5px 0;
+    background-color: white;
 }
 
 img {
