@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 
 # Party Specific globals
 PLOGO = "imgs/fin-logo.jpg"
+MSGINSTRUCT = "Welcome to the photobooth.  There will be a series of {} photos taken.  Don't forget to have fun and stay silly!"
 MSGSNAP = "Cheese!"
 MSGLEFT = 'Here we go again!<br />{} more to go...'
 MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
@@ -61,6 +62,11 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         print("[{0}] Sent: {1}".format(self.request.remote_ip,message))
         recv_msg = json.loads(message)
         if recv_msg['type'] == 'hello':
+            self.write_message({
+                'type': 'hello',
+                'data': MSGINSTRUCT.format(PHOTOSTRIP)
+            })
+            sleep(5)
             self.countdown()
         elif recv_msg['type'] == 'print':
             print('Printer requested: {}'.format(recv_msg))
