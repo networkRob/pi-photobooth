@@ -13,7 +13,6 @@ __version__ = 0.3
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
-import json
 import base64
 import io
 from os import getcwd
