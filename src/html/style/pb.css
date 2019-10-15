@@ -62,7 +62,7 @@ a:hover {
 
 #countdown {
     text-align: center;
-    font-size: 2em;
+    font-size: 4em;
     color: red;
     font-family: jungle;
 }
@@ -70,7 +70,8 @@ a:hover {
 #title {
     text-align: center;
     font-family: jungle;
-    color: yellow;
+    font-size: 2em;
+    color: black;
 }
 
 #baseID {
