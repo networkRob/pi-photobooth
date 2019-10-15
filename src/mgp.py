@@ -203,7 +203,7 @@ def printImage(copies, picture_path):
         output = p.communicate()[0].decode("utf-8")
         return(output)
     else:
-        print("Printing disabled")
+        print("Printing to {} is currently disabled".format(PRINTERNAME))
 
 if __name__ == "__main__":
     camera = PiCamera(resolution=pi_resolution)
