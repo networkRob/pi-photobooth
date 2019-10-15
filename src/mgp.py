@@ -15,6 +15,7 @@ import tornado.ioloop
 import tornado.web
 import base64
 import io
+import json
 from os import getcwd
 from subprocess import Popen, PIPE
 from PIL import Image
@@ -54,10 +55,11 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self,message):
         print("[{0}] Sent: {1}".format(self.request.remote_ip,message))
-        if message['type'] == 'hello':
+        recv_msg = json.loads(message)
+        if recv_msg['type'] == 'hello':
             self.countdown()
-        elif message['type'] == 'print':
-            print('Printer requested: {}'.format(message))
+        elif recv_msg['type'] == 'print':
+            print('Printer requested: {}'.format(recv_msg))
 
     def countdown(self):
         picam = activateCamera()
