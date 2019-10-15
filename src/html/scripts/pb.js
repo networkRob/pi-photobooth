@@ -20,13 +20,15 @@ ws.onmessage = function (evt) {
     // Pre Countdown
     else if ( received_msg['type'] == 'ready') {
         document.getElementById("title").innerHTML = "Get Ready!";
-        document.getElementById("countdown").innerHTML = received_msg['data'];
+        document.getElementById("msgUpdate").innerHTML = received_msg['data'];
+        document.getElementById("countdown").innerHTML = ""
         document.getElementById("baseID").innerHTML = "";
         // document.getElementById("imgView").innerHTML = "";
     }
     // Countdown messages displayed
     else if ( received_msg['type'] == 'countdown') {
         document.getElementById("title").innerHTML = "";
+        // document.getElementById("msgUpdate").innerHTML = received_msg['data'];
         document.getElementById("countdown").innerHTML = received_msg['data'];
         document.getElementById("baseID").innerHTML = "";
         document.getElementById("imgView").innerHTML = "";
@@ -34,7 +36,8 @@ ws.onmessage = function (evt) {
     // Intermediate photo displayed
     else if ( received_msg['type'] == 'update') {
         document.getElementById("title").innerHTML = "";
-        document.getElementById("countdown").innerHTML = received_msg['data']['msg'];
+        document.getElementById("msgUpdate").innerHTML = received_msg['data']['msg'];
+        document.getElementById("countdown").innerHTML = "";
         document.getElementById("baseID").innerHTML = "";
         document.getElementById("imgView").innerHTML = "<img src='data:image/png;base64," + received_msg['data']['imgData'] + "'/><br />";
     }
@@ -44,6 +47,7 @@ ws.onmessage = function (evt) {
         tmp_output += "<p><form action='javascript:void(0);'>Print More Copies? (1 - 3)<br /> <input type='number' value='1' id='pcopy' min='1' max='3'> <a onclick='printMore()'>Print More!</a></form></p>"
         tmp_output += "<br /><br />";
         document.getElementById("title").innerHTML = "";
+        document.getElementById("msgUpdate").innerHTML = received_msg['data'];
         document.getElementById("countdown").innerHTML = "";
         document.getElementById("baseID").innerHTML = tmp_output;
         document.getElementById("imgView").innerHTML =  "<img src='" + received_msg['data'] + "'><br />";

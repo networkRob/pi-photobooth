@@ -74,6 +74,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             'data': MSGREADY[pIND]
         })
         picam = activateCamera()
+        sleep(3)
         base_filename = getDATETIME()
         while pIND < PHOTOSTRIP:
             count_down = 3

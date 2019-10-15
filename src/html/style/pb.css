@@ -60,18 +60,25 @@ a:hover {
     font-family: jungle;
 }
 
-#countdown {
-    text-align: center;
-    font-size: 4em;
-    color: red;
-    font-family: jungle;
-}
-
 #title {
     text-align: center;
     font-family: jungle;
-    font-size: 2em;
+    font-size: 3em;
     color: black;
+}
+
+#msgUpdate {
+    text-align: center;
+    font-size: 4em;
+    font-family: jungle;
+    color: darkgreen;
+}
+
+#countdown {
+    text-align: center;
+    font-size: 6em;
+    color: red;
+    font-family: jungle;
 }
 
 #baseID {
