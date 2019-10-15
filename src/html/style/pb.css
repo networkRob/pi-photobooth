@@ -22,12 +22,14 @@ p {
 img {
     width: 800px;
     padding: 15px;
+    margin: 0 auto;
     background-color: black;
 }
 
 form {
     margin: 0 auto;
     text-align: center;
+    font-size: 2em;
 }
 
 a, input[type=button] {
