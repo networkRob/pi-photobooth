@@ -26,6 +26,7 @@ img {
 }
 
 a {
+    text-align: center;
     display: block;
     width: 250px;
     background-color: purple;
