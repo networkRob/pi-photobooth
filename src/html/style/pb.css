@@ -1,3 +1,8 @@
+@font-face {
+	font-family: jungle;
+	src: url(JUNGLEFE.TTF)
+}
+
 body {
     background-color: lightgrey;
     width: 900px;
@@ -19,7 +24,7 @@ a {
     color: white;
     text-align: center;
 	text-decoration: none;
-	font-family: Verdana, Geneva, sans-serif;
+	font-family: jungle;
 	font-size: 1em;
     padding: 6px;
     margin: 4px;
@@ -36,9 +41,11 @@ a:hover {
 	margin: 0 auto;
     padding: 25px;
     background-color: white;
+    font-family: jungle;
 }
 
 #countdown {
     font-size: 2em;
     color: red;
+    font-family: jungle;
 }

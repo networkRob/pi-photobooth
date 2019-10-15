@@ -35,6 +35,11 @@ BORDERWIDTH = 10
 # Party Specific
 PLOGO = "imgs/fin-logo.jpg"
 
+# Messages
+MSGSNAP = "Cheese!"
+MSGREADY = "Show your inner ANIMAL"
+MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
+
 def getDATETIME():
     return(datetime.now().strftime("%Y%m%d-%H%M%S"))
 
@@ -59,7 +64,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 self.write_message({'type':'countdown','data':count_down})
                 sleep(1)
                 count_down -= 1
-            self.write_message({'type':'countdown','data':'Cheese!'})
+            self.write_message({'type':'countdown','data': MSGSNAP})
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
             self.write_message({
                 'type':'update',
@@ -78,8 +83,13 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                     'data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)
                 })
                 sleep(2)
+                self.write_message({
+                    'type':'countdown',
+                    'data': MSGREADY
+                })
+                sleep(2)
         if photo_strip:
-            self.write_message({'type':'countdown','data':'All done, you can relax now<br />Creating photostrip...'})
+            self.write_message({'type':'countdown','data': MSGDONE})
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             # Upload the final image
