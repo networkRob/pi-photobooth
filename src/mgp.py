@@ -83,7 +83,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 count_down -= 1
             self.write_message({
                 'type':'countdown',
-                'data': "{0} and {1}".format(MSGSNAP,MSGREADY[pIND])})
+                'data': "{0} and<br /> {1}".format(MSGSNAP,MSGREADY[pIND])})
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
             self.write_message({
                 'type':'update',
@@ -101,12 +101,13 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                     'type': 'countdown',
                     'data': MSGLEFT.format(PHOTOSTRIP - pIND)
                 })
-                sleep(2)
+                sleep(4)
                 self.write_message({
                     'type': 'ready',
                     'data': MSGREADY[pIND]
                 })
-                sleep(4)
+                print(MSGREADY[pIND])
+                sleep(5)
         if photo_strip:
             self.write_message({'type':'countdown','data': MSGDONE})
             final_img = createStrip(base_filename, photo_strip)
