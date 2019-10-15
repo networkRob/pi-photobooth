@@ -37,7 +37,7 @@ PLOGO = "imgs/fin-logo.jpg"
 
 # Messages
 MSGSNAP = "Cheese!"
-MSGREADY = "Show your inner ANIMAL"
+MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
 MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
 
 def getDATETIME():
@@ -85,7 +85,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 sleep(2)
                 self.write_message({
                     'type':'countdown',
-                    'data': MSGREADY
+                    'data': MSGREADY[pIND-1]
                 })
                 sleep(2)
         if photo_strip:
