@@ -108,7 +108,6 @@ def bencode64(filePath):
     with open(filePath, 'rb') as imgFile:
         imgData = base64.b64encode(imgFile.read())
     imgData = imgData.decode('utf-8')
-    print(type(imgData))
     return(imgData)
 
 def activateCamera():

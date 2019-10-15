@@ -12,7 +12,6 @@ ws.onopen = function()
 };
 ws.onmessage = function (evt) {
     var re_data = evt.data;
-    console.log(evt.data);
     console.log(typeof evt.data);
     var received_msg = JSON.parse(re_data);
     if ( received_msg['type'] == 'countdown') {
@@ -27,6 +26,13 @@ ws.onmessage = function (evt) {
         tmp_output +=  "<img src='" + received_msg['data'] + "'><br />";
         document.getElementById("countdown").innerHTML = "";
         document.getElementById("baseID").innerHTML = tmp_output;
+    }
+    else if ( received_msg['type'] == 'update') {
+        var image = new Image();
+        image.src = 'data:image/png;base64,' + received_msg['data']['imgData'];
+        document.body.appendChild(image);
+        document.getElementById("countdown").innerHTML = received_msg['data']['msg'];
+        // document.getElementById("imgView").innerHTML = "<img src='";
     }
     else {
         document.getElementById("baseID").innerHTML = received_msg['data'];
