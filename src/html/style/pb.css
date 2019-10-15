@@ -25,6 +25,11 @@ img {
     background-color: black;
 }
 
+form {
+    margin: 0 auto;
+    text-align: center;
+}
+
 a, input[type=button] {
     display: block;
     width: 250px;
