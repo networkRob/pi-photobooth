@@ -6,9 +6,7 @@ var ws = new WebSocket(mURL);
 ws.onopen = function()
 {
     // Web Socket is connected, send data using send()
-    ws.send("Hello Test Camera");
-    // ws.send(JSON.stringify({type:"Hello",data:"Hello Test"}));
-    // alert("Message is sent...");
+    ws.send(JSON.stringify({type:"Hello",data:"Hello Test Camera"}));
 };
 ws.onmessage = function (evt) {
     var re_data = evt.data;
@@ -22,9 +20,13 @@ ws.onmessage = function (evt) {
     }
     else if (received_msg['type'] == 'photo') {
         tmp_output =  "<a href='../booth'>Snap Another?</a><br /><br />";
-        tmp_output +=  "<img src='" + received_msg['data'] + "'><br />";
+        document.getElementById("imgView").innerHTML =  "<img src='" + received_msg['data'] + "'><br />";
         document.getElementById("countdown").innerHTML = "";
         document.getElementById("baseID").innerHTML = tmp_output;
+    }
+    else if ( received_msg['type'] == 'update') {
+        document.getElementById("countdown").innerHTML = received_msg['data']['msg'];
+        document.getElementById("imgView").innerHTML = "<img src='data:image/png;base64," + received_msg['data']['imgData'] + "'/><br />";
     }
     else {
         document.getElementById("baseID").innerHTML = received_msg['data'];

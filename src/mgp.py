@@ -13,16 +13,17 @@ __version__ = 0.3
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
-import json
+import base64
+import io
 from os import getcwd
 from subprocess import Popen, PIPE
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image
 from picamera import PiCamera
 from time import sleep
 from datetime import datetime, timedelta
 
 l_port = 8888
-pi_resolution = (1772, 1181)
+pi_resolution = (1800, 1200)
 # pi_resolution = (1181, 1772)
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
@@ -43,7 +44,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         print("New connection from: {}".format(self.request.remote_ip))
-        self.write_message(json.dumps({'type':'hello','data':"hello user"}))
+        self.write_message({'type':'hello','data':"hello user"})
 
     def on_message(self,message):
         print("[{0}] Sent: {1}".format(self.request.remote_ip,message))
@@ -57,30 +58,35 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         while pIND < PHOTOSTRIP:
             count_down = 3
             while count_down > 0:
-                self.write_message(json.dumps({'type':'countdown','data':count_down}))
+                self.write_message({'type':'countdown','data':count_down})
                 sleep(1)
                 count_down -= 1
-            self.write_message(json.dumps({'type':'countdown','data':'Cheese!'}))
+            self.write_message({'type':'countdown','data':'Cheese!'})
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
-            self.write_message(json.dumps({'type':'countdown','data':'Picture taken!'}))
+            self.write_message({
+                'type':'update',
+                'data':{
+                    'msg':'Picture taken!',
+                    'imgData': bencode64(cam_result['path'])
+                }})
             # Upload photo to Dropbox App
             uploadPicture(cam_result['path'])
             photo_strip.append(cam_result['path'])
             print("Pictures saved to pb-imgs/{}".format(cam_result['name']))
             pIND += 1
             if pIND < PHOTOSTRIP:
-                self.write_message(json.dumps({
+                self.write_message({
                     'type':'countdown',
                     'data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)
-                }))
+                })
                 sleep(2)
         if photo_strip:
-            self.write_message(json.dumps({'type':'countdown','data':'All done, you can relax now<br />Creating photostrip...'}))
+            self.write_message({'type':'countdown','data':'All done, you can relax now<br />Creating photostrip...'})
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             # Upload the final image
             uploadPicture('html/' + final_img)
-            self.write_message(json.dumps({'type':'photo','data':final_img}))
+            self.write_message({'type':'photo','data':final_img})
         else:
             print("There was an error :(")
         # Might need this? still get an error when trying to do it again
@@ -97,9 +103,17 @@ class boothRequestHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('html/booth.html')
 
+def bencode64(filePath):
+    tmp_buff = io.BytesIO()
+    img = Image.open(filePath)
+    img = img.resize((800,600))
+    img.save(tmp_buff, format="JPEG")
+    tmp_buff.seek(0)
+    imgData = base64.b64encode(tmp_buff.read())
+    imgData = imgData.decode('utf-8')
+    return(imgData)
 
 def activateCamera():
-    # camera.resolution = pi_resolution
     camera.start_preview()
     return(camera)
 
