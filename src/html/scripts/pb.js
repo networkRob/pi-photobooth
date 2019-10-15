@@ -12,7 +12,6 @@ ws.onopen = function()
 };
 ws.onmessage = function (evt) {
     var re_data = evt.data;
-    console.log(typeof evt.data);
     var received_msg = JSON.parse(re_data);
     if ( received_msg['type'] == 'countdown') {
         document.getElementById("countdown").innerHTML = received_msg['data'];

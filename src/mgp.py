@@ -15,15 +15,16 @@ import tornado.ioloop
 import tornado.web
 import json
 import base64
+import io
 from os import getcwd
 from subprocess import Popen, PIPE
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image
 from picamera import PiCamera
 from time import sleep
 from datetime import datetime, timedelta
 
 l_port = 8888
-pi_resolution = (1772, 1181)
+pi_resolution = (1800, 1200)
 # pi_resolution = (1181, 1772)
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
@@ -105,9 +106,16 @@ class boothRequestHandler(tornado.web.RequestHandler):
         self.render('html/booth.html')
 
 def bencode64(filePath):
-    with open(filePath, 'rb') as imgFile:
-        imgData = base64.b64encode(imgFile.read())
+    tmp_buff = io.BytesIO()
+    img = Image.open(filePath)
+    img = img.resize((800,600))
+    img.save(tmp_buff, format="JPEG")
+    tmp_buff.seek(0)
+    imgData = base64.b64encode(tmp_buff.read())
     imgData = imgData.decode('utf-8')
+    # with open(filePath, 'rb') as imgFile:
+    #     imgData = base64.b64encode(imgFile.read())
+    # imgData = imgData.decode('utf-8')
     return(imgData)
 
 def activateCamera():
