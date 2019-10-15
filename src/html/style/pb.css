@@ -26,7 +26,6 @@ img {
 }
 
 a {
-    text-align: center;
     display: block;
     width: 250px;
     background-color: purple;
@@ -36,7 +35,7 @@ a {
 	font-family: jungle;
 	font-size: 1em;
     padding: 6px;
-    margin: 4px;
+    margin: 5px auto;
     border-radius: 4px;
 }
 
