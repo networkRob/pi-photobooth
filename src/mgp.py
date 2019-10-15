@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 # Party Specific globals
 PLOGO = "imgs/fin-logo.jpg"
 MSGSNAP = "Cheese!"
+MSGLEFT = 'Here we go again!<br />{} more to go...'
 MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
 MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
 
@@ -62,7 +63,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         elif recv_msg['type'] == 'print':
             print('Printer requested: {}'.format(recv_msg))
             if LASTPRINTED:
-                printImage(recv_msg['data'],LASTPRINTED)
+                printImage(int(recv_msg['data']),LASTPRINTED)
 
     def countdown(self):
         global LASTPRINTED
@@ -91,12 +92,12 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             pIND += 1
             if pIND < PHOTOSTRIP:
                 self.write_message({
-                    'type':'countdown',
-                    'data':'Here we go again!<br />{} more to go...'.format(PHOTOSTRIP - pIND)
+                    'type': 'countdown',
+                    'data': MSGLEFT.format(PHOTOSTRIP - pIND)
                 })
                 sleep(2)
                 self.write_message({
-                    'type':'countdown',
+                    'type': 'countdown',
                     'data': MSGREADY[pIND-1]
                 })
                 sleep(4)
@@ -198,6 +199,9 @@ def printImage(copies, picture_path):
     print("Printing {0} of {1}".format(copy_string, picture_path))
     if PRINTENABLED:
         print('Sending to {}'.format(PRINTERNAME))
+        p = Popen(["lp", "-n", copies, "-d", PRINTERNAME, picture_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output = p.communicate()[0].decode("utf-8")
+        return(output)
     else:
         print("Printing disabled")
 
