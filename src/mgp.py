@@ -183,8 +183,13 @@ def uploadPicture(picture_path):
     output = p.communicate()[0].decode("utf-8")
     return(output)
 
-def printImage(picture_path):
-    print("Printing {}".format(picture_path))
+def printImage(copies, picture_path):
+    copy_string = '{} copy'.format(copies) if copies == 1 else '{} copies'.format(copies)
+    print("Printing {0} of {1}".format(copy_string, picture_path))
+    if PRINTENABLED:
+        print('Sending to {}'.format(PRINTERNAME))
+    else:
+        print("Printing disabled")
 
 if __name__ == "__main__":
     camera = PiCamera(resolution=pi_resolution)
