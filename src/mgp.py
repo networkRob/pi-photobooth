@@ -14,6 +14,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import json
+import base64
 from os import getcwd
 from subprocess import Popen, PIPE
 from PIL import Image, ImageFont, ImageDraw
@@ -62,7 +63,12 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 count_down -= 1
             self.write_message(json.dumps({'type':'countdown','data':'Cheese!'}))
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
-            self.write_message(json.dumps({'type':'countdown','data':'Picture taken!'}))
+            self.write_message(json.dumps({
+                'type':'update',
+                'data':{
+                    'msg':'Picture taken!',
+                    'imgData': bencode64(cam_result['path'])
+                }}))
             # Upload photo to Dropbox App
             uploadPicture(cam_result['path'])
             photo_strip.append(cam_result['path'])
@@ -97,6 +103,10 @@ class boothRequestHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('html/booth.html')
 
+def bencode64(filePath):
+    with open(filePath, 'rb') as imgFile:
+        imgData = base64.b64encode(imgFile.read())
+    return(imgData)
 
 def activateCamera():
     # camera.resolution = pi_resolution
