@@ -33,6 +33,12 @@ form {
     text-align: center;
 }
 
+input[type=number] {
+    width: 20px;
+    font-family: jungle;
+    font-size: 1em;
+}
+
 a, input[type=button] {
     display: block;
     width: 250px;

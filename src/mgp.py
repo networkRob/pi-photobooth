@@ -7,7 +7,7 @@ Raspberrypi ZeroW web based photobooth.
 
 """
 __author__ = 'Rob Martin'
-__version__ = 0.3
+__version__ = 0.5
 
 # import tornado.httpserver
 import tornado.websocket
@@ -26,12 +26,12 @@ from datetime import datetime, timedelta
 
 # Party Specific globals
 PLOGO = "imgs/fin-logo.jpg"
-MSGINSTRUCT = "Welcome to the photobooth.<br />There will be a series of {} photos taken.<br />Don't forget to have fun and<br />Stay Silly!"
+MSGINSTRUCT = "There will be a series of {} photos taken.<br /><br />Don't forget to have fun and<br />Stay Silly!"
 MSGSNAP = "Cheese!"
 MSGLEFT = 'Here we go again!<br />{} more to go...'
 MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
 MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
-MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!"]
+MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!", "Your eyes were closed"]
 
 # Camera Specifics
 l_port = 8888
