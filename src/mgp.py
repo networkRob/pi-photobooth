@@ -16,6 +16,7 @@ import tornado.web
 import base64
 import io
 import json
+from random import choice
 from os import getcwd
 from subprocess import Popen, PIPE
 from PIL import Image
@@ -29,6 +30,7 @@ MSGSNAP = "Cheese!"
 MSGLEFT = 'Here we go again!<br />{} more to go...'
 MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
 MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
+MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!"]
 
 # Camera Specifics
 l_port = 8888
@@ -93,7 +95,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             self.write_message({
                 'type':'update',
                 'data':{
-                    'msg':'Picture taken!',
+                    'msg': choice(MSGRANDOM),
                     'imgData': bencode64(cam_result['path'])
                 }})
             # Upload photo to Dropbox App
@@ -114,7 +116,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 sleep(5)
         if photo_strip:
             self.write_message({
-                'type':'countdown',
+                'type':'done',
                 'data': MSGDONE
             })
             final_img = createStrip(base_filename, photo_strip)
