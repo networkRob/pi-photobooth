@@ -68,7 +68,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 'type':'update',
                 'data':{
                     'msg':'Picture taken!',
-                    'imgData': bencode64(cam_result['path']).decode('utf-8')
+                    'imgData': bencode64(cam_result['path'])
                 }})
             # Upload photo to Dropbox App
             uploadPicture(cam_result['path'])
@@ -107,6 +107,8 @@ class boothRequestHandler(tornado.web.RequestHandler):
 def bencode64(filePath):
     with open(filePath, 'rb') as imgFile:
         imgData = base64.b64encode(imgFile.read())
+    imgData = imgData.decode('utf-8')
+    print(type(imgData))
     return(imgData)
 
 def activateCamera():
