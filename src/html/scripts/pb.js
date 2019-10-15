@@ -29,7 +29,7 @@ ws.onmessage = function (evt) {
     // Final photostrip displayed
     else if (received_msg['type'] == 'photo') {
         tmp_output =  "<a href='../booth'>Snap Another?</a>";
-        tmp_output += "<form action='javascript:void(0);'>Print More? <input type='number' value='1' name='quantity' min='1' max='3'> <input type='button' value='Print More!' onclick='printMore()'></form> "
+        tmp_output += "<form action='javascript:void(0);'>Print More? <input type='number' value='1' id='pcopy' min='1' max='3'> <input type='button' value='Print More!' onclick='printMore()'></form> "
         tmp_output += "<br /><br />";
         document.getElementById("imgView").innerHTML =  "<img src='" + received_msg['data'] + "'><br />";
         document.getElementById("countdown").innerHTML = "";
@@ -42,5 +42,5 @@ ws.onmessage = function (evt) {
 }
 function printMore() {
     // Function to request more printed copies
-    ws.send(JSON.stringify({type:"print",data:"Hello Test Camera"}));
+    ws.send(JSON.stringify({type:"print",data:document.getElementById("pcopy").value}));
 }
