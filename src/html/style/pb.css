@@ -1,7 +1,59 @@
+@font-face {
+	font-family: jungle;
+	src: url(JUNGLEFE.TTF)
+}
+
 body {
     background-color: lightgrey;
+    width: 900px;
+	height:100%;
+	margin: 0 auto;
+	padding: 5px 0;
+}
+
+h2 {
+    text-align: center;
+}
+
+p {
+    text-align: center;
 }
 
 img {
     width: 800px;
+    padding: 15px;
+    background-color: black;
+}
+
+a {
+    display: block;
+    width: 250px;
+    background-color: purple;
+    color: white;
+    text-align: center;
+	text-decoration: none;
+	font-family: jungle;
+	font-size: 1em;
+    padding: 6px;
+    margin: 5px auto;
+    border-radius: 4px;
+}
+
+a:hover {
+    color: yellow;
+}
+
+#bodyContent {
+    width: 980px;
+	height:100%;
+	margin: 0 auto;
+    padding: 25px;
+    background-color: white;
+    font-family: jungle;
+}
+
+#countdown {
+    font-size: 2em;
+    color: red;
+    font-family: jungle;
 }
