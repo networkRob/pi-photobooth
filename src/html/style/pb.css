@@ -12,9 +12,10 @@ img {
 
 a {
     display: block;
-    width: 100px;
+    width: 250px;
     background-color: purple;
-	color: white;
+    color: white;
+    text-align: center;
 	text-decoration: none;
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 1em;
