@@ -13,8 +13,9 @@ ws.onmessage = function (evt) {
     var received_msg = JSON.parse(re_data);
     if (received_msg['type'] == 'hello') {
         document.getElementById("title").innerHTML = "";
+        document.getElementById("msgUpdate").innerHTML = received_msg['data'];
         document.getElementById("countdown").innerHTML = "";
-        document.getElementById("baseID").innerHTML = received_msg['data'];
+        document.getElementById("baseID").innerHTML = "";
         document.getElementById("imgView").innerHTML =  "";
     }
     // Pre Countdown
