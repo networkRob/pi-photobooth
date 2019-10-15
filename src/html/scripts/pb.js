@@ -44,7 +44,7 @@ ws.onmessage = function (evt) {
     // Done taking pictures
     else if ( received_msg['type'] == 'done') {
         document.getElementById("title").innerHTML = "";
-        document.getElementById("msgUpdate").innerHTML = received_msg['data']['msg'];
+        document.getElementById("msgUpdate").innerHTML = received_msg['data'];
         document.getElementById("countdown").innerHTML = "";
         document.getElementById("baseID").innerHTML = "";
         document.getElementById("imgView").innerHTML = "";
