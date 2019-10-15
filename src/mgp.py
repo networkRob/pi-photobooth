@@ -22,25 +22,26 @@ from picamera import PiCamera
 from time import sleep
 from datetime import datetime, timedelta
 
+# Party Specific globals
+PLOGO = "imgs/fin-logo.jpg"
+MSGSNAP = "Cheese!"
+MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
+MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
+
+# Camera Specifics
 l_port = 8888
-# pi_resolution = (1800, 1200)
 pi_resolution = (1200, 1800)
 pi_thumbnail = (600, 900)
+
+# Global Utilities
+PRINTERNAME = 'Canon_SELPHY_CP1300-1'
+PRINTENABLED = False
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
 UPLOAD_DESTINATION = "mTest/"
 # Number of photos to take
 PHOTOSTRIP = 3
-FINALWIDTH = 800
-FINALHEIGHT = 800
 BORDERWIDTH = 10
-# Party Specific
-PLOGO = "imgs/fin-logo.jpg"
-
-# Messages
-MSGSNAP = "Cheese!"
-MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
-MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
 
 def getDATETIME():
     return(datetime.now().strftime("%Y%m%d-%H%M%S"))
@@ -94,6 +95,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             self.write_message({'type':'countdown','data': MSGDONE})
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
+            printImage('html/{}'.format(final_img))
             # Upload the final image
             uploadPicture('html/' + final_img)
             self.write_message({'type':'photo','data':final_img})
@@ -180,6 +182,9 @@ def uploadPicture(picture_path):
     p = Popen([UPLOADER, "-s", "upload", picture_path, UPLOAD_DESTINATION], stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output = p.communicate()[0].decode("utf-8")
     return(output)
+
+def printImage(picture_path):
+    print("Printing {}".format(picture_path))
 
 if __name__ == "__main__":
     camera = PiCamera(resolution=pi_resolution)
