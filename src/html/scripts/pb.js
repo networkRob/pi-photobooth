@@ -27,11 +27,11 @@ ws.onmessage = function (evt) {
         document.getElementById("baseID").innerHTML = tmp_output;
     }
     else if ( received_msg['type'] == 'update') {
-        var image = new Image();
-        image.src = 'data:image/png;base64,' + received_msg['data']['imgData'];
-        document.body.appendChild(image);
+        // var image = new Image();
+        // image.src = 'data:image/png;base64,' + received_msg['data']['imgData'];
+        // document.body.appendChild(image);
         document.getElementById("countdown").innerHTML = received_msg['data']['msg'];
-        // document.getElementById("imgView").innerHTML = "<img src='";
+        document.getElementById("imgView").innerHTML = "<img src='data:image/png;base64," + received_msg['data']['imgData'] + "'/><br />";
     }
     else {
         document.getElementById("baseID").innerHTML = received_msg['data'];
