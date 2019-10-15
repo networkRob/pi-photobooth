@@ -10,6 +10,16 @@ img {
     width: 800px;
 }
 
+a {
+    display: block;
+    background-color: purple;
+	color: white;
+	text-decoration: none;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 1.5em;
+	padding: 6px 4px;
+}
+
 #bodyContent {
     width: 980px;
 	height:100%;
@@ -17,4 +27,3 @@ img {
     padding: 25px;
     background-color: white;
 }
-
