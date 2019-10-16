@@ -11,21 +11,36 @@ body {
 	padding: 5px 0;
 }
 
-h2 {
+h1, h2 {
     text-align: center;
 }
 
 p {
     text-align: center;
+    font-family: jungle;
+	font-size: 2em;
 }
 
 img {
     width: 800px;
     padding: 15px;
+    margin: 0 auto;
     background-color: black;
 }
 
-a {
+form {
+    margin: 0 auto;
+    text-align: center;
+}
+
+input[type=number] {
+    width: 50px;
+    text-align: center;
+    font-family: jungle;
+    font-size: 1em;
+}
+
+a, input[type=button] {
     display: block;
     width: 250px;
     background-color: purple;
@@ -44,7 +59,7 @@ a:hover {
 }
 
 #bodyContent {
-    width: 980px;
+    width: 850px;
 	height:100%;
 	margin: 0 auto;
     padding: 25px;
@@ -52,8 +67,28 @@ a:hover {
     font-family: jungle;
 }
 
+#title {
+    text-align: center;
+    font-family: jungle;
+    font-size: 3em;
+    color: black;
+}
+
+#msgUpdate {
+    text-align: center;
+    font-size: 4em;
+    font-family: jungle;
+    color: darkgreen;
+}
+
 #countdown {
-    font-size: 2em;
+    text-align: center;
+    font-size: 6em;
     color: red;
+    font-family: jungle;
+}
+
+#baseID {
+    text-align: center;
     font-family: jungle;
 }

@@ -7,7 +7,7 @@ Raspberrypi ZeroW web based photobooth.
 
 """
 __author__ = 'Rob Martin'
-__version__ = 0.3
+__version__ = 0.5
 
 # import tornado.httpserver
 import tornado.websocket
@@ -16,27 +16,32 @@ import tornado.web
 import base64
 import io
 import json
+from random import choice
 from os import getcwd
 from subprocess import Popen, PIPE
 from PIL import Image
 from picamera import PiCamera
 from time import sleep
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # Party Specific globals
 PLOGO = "imgs/fin-logo.jpg"
+MSGINSTRUCT = "There will be a series of {} photos taken.<br /><br />Don't forget to have fun and<br />Stay Silly!"
 MSGSNAP = "Cheese!"
-MSGLEFT = 'Here we go again!<br />{} more to go...'
+MSGLEFT = '{} more to go...'
 MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
 MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
+MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!", "Your eyes were closed"]
 
 # Camera Specifics
 l_port = 8888
 pi_resolution = (1200, 1800)
 pi_thumbnail = (600, 900)
+pi_awbmode = 'fluorescent'
+pi_sat = 20
 
 # Global Utilities
-PRINTERNAME = 'Canon_SELPHY_CP1300-1'
+PRINTERNAME = 'Canon_SELPHY_CP1300'
 PRINTENABLED = False
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
@@ -59,6 +64,11 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
         print("[{0}] Sent: {1}".format(self.request.remote_ip,message))
         recv_msg = json.loads(message)
         if recv_msg['type'] == 'hello':
+            self.write_message({
+                'type': 'hello',
+                'data': MSGINSTRUCT.format(PHOTOSTRIP)
+            })
+            sleep(10)
             self.countdown()
         elif recv_msg['type'] == 'print':
             print('Printer requested: {}'.format(recv_msg))
@@ -67,22 +77,33 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
 
     def countdown(self):
         global LASTPRINTED
-        picam = activateCamera()
         photo_strip = []
         pIND = 0
+        self.write_message({
+            'type': 'ready',
+            'data': MSGREADY[pIND]
+        })
+        picam = activateCamera()
+        sleep(3)
         base_filename = getDATETIME()
         while pIND < PHOTOSTRIP:
             count_down = 3
             while count_down > 0:
-                self.write_message({'type':'countdown','data':count_down})
+                self.write_message({
+                    'type':'countdown',
+                    'data':count_down
+                })
                 sleep(1)
                 count_down -= 1
-            self.write_message({'type':'countdown','data': MSGSNAP})
+            self.write_message({
+                'type':'countdown',
+                'data': MSGSNAP
+            })
             cam_result = takePicture(picam,base_filename + "-{}".format(pIND + 1))
             self.write_message({
                 'type':'update',
                 'data':{
-                    'msg':'Picture taken!',
+                    'msg': choice(MSGRANDOM),
                     'imgData': bencode64(cam_result['path'])
                 }})
             # Upload photo to Dropbox App
@@ -92,24 +113,31 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             pIND += 1
             if pIND < PHOTOSTRIP:
                 self.write_message({
-                    'type': 'countdown',
+                    'type': 'ready',
                     'data': MSGLEFT.format(PHOTOSTRIP - pIND)
                 })
-                sleep(2)
-                self.write_message({
-                    'type': 'countdown',
-                    'data': MSGREADY[pIND-1]
-                })
                 sleep(4)
+                self.write_message({
+                    'type': 'ready',
+                    'data': MSGREADY[pIND]
+                })
+                sleep(5)
         if photo_strip:
-            self.write_message({'type':'countdown','data': MSGDONE})
+            picam.stop_preview()
+            self.write_message({
+                'type':'done',
+                'data': MSGDONE
+            })
             final_img = createStrip(base_filename, photo_strip)
             print("Final picture saved to {}".format(final_img))
             printImage(1, 'html/{}'.format(final_img))
             LASTPRINTED = 'html/{}'.format(final_img)
             # Upload the final image
             uploadPicture('html/' + final_img)
-            self.write_message({'type':'photo','data':final_img})
+            self.write_message({
+                'type':'photo',
+                'data':final_img
+            })
         else:
             print("There was an error :(")
         # Might need this? still get an error when trying to do it again
@@ -161,12 +189,12 @@ def createStrip(base_filename, imgPaths):
     l_x, l_y = logo_img.size
     logo_ratio = l_x / l_y
     if logo_ratio > 1.0:
-        n_height = int(pi_resolution[1] / logo_ratio)
+        n_height = int(pi_resolution[0] / logo_ratio)
         logo_img = logo_img.resize((pi_resolution[0], n_height))
         x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (pi_resolution[0] + BORDERWIDTH))
         y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (pi_resolution[1] + BORDERWIDTH)) + int((pi_resolution[1] - n_height) / 2)
     else:
-        n_width = int(pi_resolution[0] / logo_ratio)
+        n_width = int(pi_resolution[1] / logo_ratio)
         logo_img = logo_img.resize((n_width, pi_resolution[1]))
         x = BORDERWIDTH + ((PHOTOSTRIP % 2) * (pi_resolution[0] + BORDERWIDTH)) + int((pi_resolution[0] - n_width) / 2)
         y = BORDERWIDTH + ((PHOTOSTRIP // 2) * (pi_resolution[1] + BORDERWIDTH))
@@ -180,9 +208,7 @@ def createStrip(base_filename, imgPaths):
 def takePicture(cam_obj, base_filename):
     file_name = base_filename + ".jpg"
     file_path = pic_out + file_name
-    sleep(1)
     cam_obj.capture(file_path)
-    cam_obj.stop_preview()
     img_result = {
         'path': file_path,
         'name': file_name,
@@ -207,6 +233,8 @@ def printImage(copies, picture_path):
 
 if __name__ == "__main__":
     camera = PiCamera(resolution=pi_resolution)
+    camera.awb_mode = pi_awbmode
+    camera.saturation = pi_sat
     app = tornado.web.Application([
         (r'/pb-imgs/(.*)', tornado.web.StaticFileHandler, {'path': "html/pb-imgs/"}),
         (r'/', mhomeRequestHandler),
