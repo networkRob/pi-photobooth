@@ -74,7 +74,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             if LASTPRINTED:
                 sleep(10)
             else:
-                sleep(25)
+                sleep(30)
             self.countdown(picam)
         elif recv_msg['type'] == 'print':
             print('Printer requested: {}'.format(recv_msg))
@@ -90,7 +90,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             'data': MSGREADY[pIND]
         })
         #picam = activateCamera()
-        #sleep(3)
+        sleep(3)
         base_filename = getDATETIME()
         while pIND < PHOTOSTRIP:
             count_down = 3
