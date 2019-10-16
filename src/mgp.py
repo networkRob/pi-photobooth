@@ -71,10 +71,11 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 'type': 'hello',
                 'data': MSGINSTRUCT.format(PHOTOSTRIP)
             })
-            if LASTPRINTED:
-                sleep(10)
-            else:
-                sleep(30)
+            sleep(10)
+            # if LASTPRINTED:
+            #     sleep(10)
+            # else:
+            #     sleep(30)
             self.countdown(picam)
         elif recv_msg['type'] == 'print':
             print('Printer requested: {}'.format(recv_msg))
@@ -89,7 +90,6 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             'type': 'ready',
             'data': MSGREADY[pIND]
         })
-        #picam = activateCamera()
         sleep(3)
         base_filename = getDATETIME()
         while pIND < PHOTOSTRIP:
@@ -171,7 +171,7 @@ def bencode64(filePath):
     return(imgData)
 
 def activateCamera():
-    camera.start_preview()
+    camera.start_preview(resolution=pi_thumbnail)
     return(camera)
 
 def createStrip(base_filename, imgPaths):
