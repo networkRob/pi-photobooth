@@ -19,7 +19,7 @@ import json
 from random import choice
 from os import getcwd
 from subprocess import Popen, PIPE
-from PIL import Image
+from PIL import Image, ImageFilter
 from picamera import PiCamera
 from time import sleep
 from datetime import datetime
@@ -212,9 +212,16 @@ def createStrip(base_filename, imgPaths):
     return(new_fpath.replace('html/',''))
 
 def takePicture(cam_obj, base_filename):
+    tmp_stream = io.BytesIO()
     file_name = base_filename + ".jpg"
     file_path = pic_out + file_name
-    cam_obj.capture(file_path)
+    cam_obj.capture(tmp_stream, format='jpeg')
+    tmp_stream.seek(0)
+    tmp_img = Image.open(tmp_stream)
+    tmp_img = tmp_img.filter(ImageFilter.DETAIL)
+    tmp_img.save(file_path)
+    del tmp_stream, tmp_img
+    # cam_obj.capture(file_path)
     img_result = {
         'path': file_path,
         'name': file_name,
