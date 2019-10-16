@@ -35,11 +35,11 @@ MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The M
 
 # Camera Specifics
 l_port = 8888
-# pi_resolution = (1200, 1800)
-pi_resolution = (900, 1200)
+pi_resolution = (1200, 1800)
+# pi_resolution = (900, 1200)
 pi_thumbnail = (600, 900)
 pi_awbmode = 'fluorescent'
-pi_sensor_mode = 4
+pi_sensor_mode = 3
 pi_sat = 20
 
 # Global Utilities
