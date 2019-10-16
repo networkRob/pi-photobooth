@@ -234,7 +234,7 @@ def printImage(copies, picture_path):
         print("Printing to {} is currently disabled".format(PRINTERNAME))
 
 if __name__ == "__main__":
-    camera = PiCamera(resolution=pi_resolution, mode=pi_sensor_mode)
+    camera = PiCamera(resolution=pi_resolution, sensor_mode=pi_sensor_mode)
     camera.awb_mode = pi_awbmode
     camera.saturation = pi_sat
     app = tornado.web.Application([
