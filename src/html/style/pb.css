@@ -22,7 +22,7 @@ p {
 }
 
 img {
-    width: 730px;
+    /* width: 730px; */
     padding: 10px;
     margin: 0 auto;
     background-color: black;
