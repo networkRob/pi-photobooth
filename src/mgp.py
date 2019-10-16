@@ -232,7 +232,9 @@ def printImage(copies, picture_path):
         print("Printing to {} is currently disabled".format(PRINTERNAME))
 
 if __name__ == "__main__":
-    camera = PiCamera(resolution=pi_resolution, awb_mode=pi_awbmode, saturation=pi_sat)
+    camera = PiCamera(resolution=pi_resolution)
+    camera.awb_mode = pi_awbmode
+    camera.saturation = pi_sat
     app = tornado.web.Application([
         (r'/pb-imgs/(.*)', tornado.web.StaticFileHandler, {'path': "html/pb-imgs/"}),
         (r'/', mhomeRequestHandler),
