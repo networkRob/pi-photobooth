@@ -28,7 +28,7 @@ from datetime import datetime
 PLOGO = "imgs/fin-logo.jpg"
 MSGINSTRUCT = "There will be a series of {} photos taken.<br /><br />Don't forget to have fun and<br />Stay Silly!"
 MSGSNAP = "Cheese!"
-MSGLEFT = 'Here we go again!<br />{} more to go...'
+MSGLEFT = '{} more to go...'
 MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
 MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
 MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!", "Your eyes were closed"]
