@@ -72,6 +72,8 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 'data': MSGINSTRUCT.format(PHOTOSTRIP)
             })
             sleep(10)
+            if !LASTPRINTED:
+                takePicture(picam,'tmp.jpg')
             # if LASTPRINTED:
             #     sleep(10)
             # else:
@@ -171,7 +173,7 @@ def bencode64(filePath):
     return(imgData)
 
 def activateCamera():
-    camera.start_preview(resolution=pi_thumbnail)
+    camera.start_preview()
     return(camera)
 
 def createStrip(base_filename, imgPaths):
