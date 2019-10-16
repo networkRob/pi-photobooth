@@ -35,9 +35,11 @@ MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The M
 
 # Camera Specifics
 l_port = 8888
-pi_resolution = (1200, 1800)
+# pi_resolution = (1200, 1800)
+pi_resolution = (900, 1200)
 pi_thumbnail = (600, 900)
 pi_awbmode = 'fluorescent'
+pi_sensor_mode = 4
 pi_sat = 20
 
 # Global Utilities
@@ -232,7 +234,7 @@ def printImage(copies, picture_path):
         print("Printing to {} is currently disabled".format(PRINTERNAME))
 
 if __name__ == "__main__":
-    camera = PiCamera(resolution=pi_resolution)
+    camera = PiCamera(resolution=pi_resolution, mode=pi_sensor_mode)
     camera.awb_mode = pi_awbmode
     camera.saturation = pi_sat
     app = tornado.web.Application([
