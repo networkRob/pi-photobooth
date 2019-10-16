@@ -23,7 +23,7 @@ p {
 
 img {
     width: 720px;
-    padding: 15px;
+    padding: 10px;
     margin: 0 auto;
     background-color: black;
 }
@@ -61,8 +61,8 @@ a:hover {
 #bodyContent {
     width: 750px;
 	height:100%;
-	margin: 0 auto;
-    padding: 25px;
+    margin: 0 auto;
+    padding: 25 5;
     background-color: white;
     font-family: jungle;
 }
