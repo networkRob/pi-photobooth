@@ -22,7 +22,7 @@ from subprocess import Popen, PIPE
 from PIL import Image
 from picamera import PiCamera
 from time import sleep
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # Party Specific globals
 PLOGO = "imgs/fin-logo.jpg"
@@ -39,7 +39,7 @@ pi_resolution = (1200, 1800)
 pi_thumbnail = (600, 900)
 
 # Global Utilities
-PRINTERNAME = 'Canon_SELPHY_CP1300-1'
+PRINTERNAME = 'Canon_SELPHY_CP1300'
 PRINTENABLED = False
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
@@ -121,6 +121,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 })
                 sleep(5)
         if photo_strip:
+            picam.stop_preview()
             self.write_message({
                 'type':'done',
                 'data': MSGDONE
@@ -207,7 +208,6 @@ def takePicture(cam_obj, base_filename):
     file_path = pic_out + file_name
     sleep(1)
     cam_obj.capture(file_path)
-    cam_obj.stop_preview()
     img_result = {
         'path': file_path,
         'name': file_name,
