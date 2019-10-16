@@ -74,7 +74,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             if LASTPRINTED:
                 sleep(10)
             else:
-                sleep(15)
+                sleep(25)
             self.countdown(picam)
         elif recv_msg['type'] == 'print':
             print('Printer requested: {}'.format(recv_msg))
