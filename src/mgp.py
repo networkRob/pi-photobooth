@@ -19,7 +19,7 @@ import json
 from random import choice
 from os import getcwd
 from subprocess import Popen, PIPE
-from PIL import Image, ImageFilter
+from PIL import Image
 from picamera import PiCamera
 from time import sleep
 from datetime import datetime
@@ -31,7 +31,7 @@ MSGSNAP = "Cheese!"
 MSGLEFT = '{} more to go...'
 MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
 MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
-MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!", "Your eyes were closed"]
+MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!", "Your eyes were closed", "That's Super Silly!"]
 
 # Camera Specifics
 l_port = 8888
@@ -208,20 +208,12 @@ def createStrip(base_filename, imgPaths):
     result.paste(logo_img, (x, y, x + w, y + h))
     new_fpath = pic_out + base_filename + "-Final.jpg"
     result = result.resize(pi_resolution)
-    result = result.filter(ImageFilter.DETAIL)
     result.save(new_fpath, quality=95)
     return(new_fpath.replace('html/',''))
 
 def takePicture(cam_obj, base_filename):
-    # tmp_stream = io.BytesIO()
     file_name = base_filename + ".jpg"
     file_path = pic_out + file_name
-    # cam_obj.capture(tmp_stream, format='jpeg')
-    # tmp_stream.seek(0)
-    # tmp_img = Image.open(tmp_stream)
-    # tmp_img = tmp_img.filter(ImageFilter.DETAIL)
-    # tmp_img.save(file_path)
-    # del tmp_stream, tmp_img
     cam_obj.capture(file_path)
     img_result = {
         'path': file_path,
