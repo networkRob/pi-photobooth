@@ -72,7 +72,7 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
                 'data': MSGINSTRUCT.format(PHOTOSTRIP)
             })
             sleep(10)
-            if !LASTPRINTED:
+            if not LASTPRINTED:
                 takePicture(picam,'tmp.jpg')
             # if LASTPRINTED:
             #     sleep(10)
