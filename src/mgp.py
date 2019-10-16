@@ -37,6 +37,8 @@ MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The M
 l_port = 8888
 pi_resolution = (1200, 1800)
 pi_thumbnail = (600, 900)
+pi_awbmode = 'fluorescent'
+pi_sat = 20
 
 # Global Utilities
 PRINTERNAME = 'Canon_SELPHY_CP1300'
@@ -206,7 +208,6 @@ def createStrip(base_filename, imgPaths):
 def takePicture(cam_obj, base_filename):
     file_name = base_filename + ".jpg"
     file_path = pic_out + file_name
-    sleep(1)
     cam_obj.capture(file_path)
     img_result = {
         'path': file_path,
@@ -231,7 +232,7 @@ def printImage(copies, picture_path):
         print("Printing to {} is currently disabled".format(PRINTERNAME))
 
 if __name__ == "__main__":
-    camera = PiCamera(resolution=pi_resolution)
+    camera = PiCamera(resolution=pi_resolution, awb_mode=pi_awbmode, saturation=pi_sat)
     app = tornado.web.Application([
         (r'/pb-imgs/(.*)', tornado.web.StaticFileHandler, {'path': "html/pb-imgs/"}),
         (r'/', mhomeRequestHandler),
