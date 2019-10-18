@@ -7,7 +7,7 @@ Raspberrypi ZeroW web based photobooth.
 
 """
 __author__ = 'Rob Martin'
-__version__ = 0.5
+__version__ = 1.0
 
 # import tornado.httpserver
 import tornado.websocket
@@ -234,9 +234,12 @@ def printImage(copies, picture_path):
     print("Printing {0} of {1}".format(copy_string, picture_path))
     if PRINTENABLED:
         print('Sending to {}'.format(PRINTERNAME))
-        p = Popen(["lp", "-n", str(copies), "-d", PRINTERNAME, picture_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        output = p.communicate()[0].decode("utf-8")
-        return(output)
+        try:
+            p = Popen(["lp", "-n", str(copies), "-d", PRINTERNAME, picture_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            output = p.communicate()[0].decode("utf-8")
+            return(output)
+        except:
+            print('An error occurred while trying to print {0} to {1}'.format(picture_path,PRINTERNAME))
     else:
         print("Printing to {} is currently disabled".format(PRINTERNAME))
 
