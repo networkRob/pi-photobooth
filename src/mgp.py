@@ -45,9 +45,10 @@ pi_sat = 20
 # Global Utilities
 PRINTERNAME = 'Canon_SELPHY_CP1300'
 PRINTENABLED = False
+UPLOADENABLED = True
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
-UPLOAD_DESTINATION = "mTest/"
+UPLOAD_DESTINATION = "Finley2Wild/"
 LASTPRINTED = ''
 # Number of photos to take
 PHOTOSTRIP = 3
@@ -74,10 +75,6 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             sleep(10)
             if not LASTPRINTED:
                 takePicture(picam,'tmp.jpg')
-            # if LASTPRINTED:
-            #     sleep(10)
-            # else:
-            #     sleep(30)
             self.countdown(picam)
         elif recv_msg['type'] == 'print':
             print('Printer requested: {}'.format(recv_msg))
@@ -224,9 +221,13 @@ def takePicture(cam_obj, base_filename):
     return(img_result)
 
 def uploadPicture(picture_path):
-    p = Popen([UPLOADER, "-s", "upload", picture_path, UPLOAD_DESTINATION], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output = p.communicate()[0].decode("utf-8")
-    return(output)
+    if UPLOADENABLED:
+        try:
+            p = Popen([UPLOADER, "-s", "upload", picture_path, UPLOAD_DESTINATION], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            output = p.communicate()[0].decode("utf-8")
+            return(output)
+        except:
+            print("Unable to upload {}".format(picture_path))
 
 def printImage(copies, picture_path):
     copy_string = '{} copy'.format(copies) if copies == 1 else '{} copies'.format(copies)
