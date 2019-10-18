@@ -5,7 +5,7 @@
 
 body {
     background-color: lightgrey;
-    width: 900px;
+    width: 100%;
 	height:100%;
 	margin: 0 auto;
 	padding: 5px 0;
@@ -22,8 +22,8 @@ p {
 }
 
 img {
-    width: 800px;
-    padding: 15px;
+    width: 730px;
+    padding: 10px;
     margin: 0 auto;
     background-color: black;
 }
@@ -42,13 +42,14 @@ input[type=number] {
 
 a, input[type=button] {
     display: block;
-    width: 250px;
+    width: 300px;
+    height: 50px;
     background-color: purple;
     color: white;
     text-align: center;
 	text-decoration: none;
 	font-family: jungle;
-	font-size: 1em;
+	font-size: 2.2em;
     padding: 6px;
     margin: 5px auto;
     border-radius: 4px;
@@ -59,10 +60,10 @@ a:hover {
 }
 
 #bodyContent {
-    width: 850px;
+    width: 750px;
 	height:100%;
-	margin: 0 auto;
-    padding: 25px;
+    margin: 0 auto;
+    padding: 25 5;
     background-color: white;
     font-family: jungle;
 }
@@ -83,7 +84,7 @@ a:hover {
 
 #countdown {
     text-align: center;
-    font-size: 6em;
+    font-size: 12em;
     color: red;
     font-family: jungle;
 }

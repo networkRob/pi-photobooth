@@ -31,13 +31,15 @@ MSGSNAP = "Cheese!"
 MSGLEFT = '{} more to go...'
 MSGREADY = ["Smile!", "Make a SILLY Face!", "Show your inner ANIMAL"]
 MSGDONE = 'All done, you can relax now<br />Creating photostrip...'
-MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!", "Your eyes were closed"]
+MSGRANDOM = ["Awesome!","Oh, How Cute...", "ROARRRR!", "That's a keeper", "The Monkeys are on the loose!", "Your eyes were closed", "That's Super Silly!"]
 
 # Camera Specifics
 l_port = 8888
 pi_resolution = (1200, 1800)
+# pi_resolution = (900, 1200)
 pi_thumbnail = (600, 900)
 pi_awbmode = 'fluorescent'
+pi_sensor_mode = 3
 pi_sat = 20
 
 # Global Utilities
@@ -63,19 +65,26 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
     def on_message(self,message):
         print("[{0}] Sent: {1}".format(self.request.remote_ip,message))
         recv_msg = json.loads(message)
+        picam = activateCamera()
         if recv_msg['type'] == 'hello':
             self.write_message({
                 'type': 'hello',
                 'data': MSGINSTRUCT.format(PHOTOSTRIP)
             })
             sleep(10)
-            self.countdown()
+            if not LASTPRINTED:
+                takePicture(picam,'tmp.jpg')
+            # if LASTPRINTED:
+            #     sleep(10)
+            # else:
+            #     sleep(30)
+            self.countdown(picam)
         elif recv_msg['type'] == 'print':
             print('Printer requested: {}'.format(recv_msg))
             if LASTPRINTED:
                 printImage(int(recv_msg['data']),LASTPRINTED)
 
-    def countdown(self):
+    def countdown(self,picam):
         global LASTPRINTED
         photo_strip = []
         pIND = 0
@@ -83,7 +92,6 @@ class cameraRequestHandler(tornado.websocket.WebSocketHandler):
             'type': 'ready',
             'data': MSGREADY[pIND]
         })
-        picam = activateCamera()
         sleep(3)
         base_filename = getDATETIME()
         while pIND < PHOTOSTRIP:
@@ -225,14 +233,14 @@ def printImage(copies, picture_path):
     print("Printing {0} of {1}".format(copy_string, picture_path))
     if PRINTENABLED:
         print('Sending to {}'.format(PRINTERNAME))
-        p = Popen(["lp", "-n", copies, "-d", PRINTERNAME, picture_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p = Popen(["lp", "-n", str(copies), "-d", PRINTERNAME, picture_path], stdin=PIPE, stdout=PIPE, stderr=PIPE)
         output = p.communicate()[0].decode("utf-8")
         return(output)
     else:
         print("Printing to {} is currently disabled".format(PRINTERNAME))
 
 if __name__ == "__main__":
-    camera = PiCamera(resolution=pi_resolution)
+    camera = PiCamera(resolution=pi_resolution, sensor_mode=pi_sensor_mode)
     camera.awb_mode = pi_awbmode
     camera.saturation = pi_sat
     app = tornado.web.Application([
