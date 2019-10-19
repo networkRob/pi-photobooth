@@ -44,7 +44,7 @@ pi_sat = 20
 
 # Global Utilities
 PRINTERNAME = 'Canon_SELPHY_CP1300'
-PRINTENABLED = False
+PRINTENABLED = True
 UPLOADENABLED = True
 pic_out = "html/pb-imgs/"
 UPLOADER = "./dropbox_uploader.sh"
